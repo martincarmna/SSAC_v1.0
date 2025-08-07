@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Sistema</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='SSAC.css') }}">
+</head>
+<body>
+    <canvas id="fondoCanvas"></canvas>
+
+    <div class="contenedor">
+        <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+        <a href="/registro">Crear una cuenta</a>
+        <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo">
+    </div>
+
+    <div class="cuadro">
+        <h2>Bienvenido Admin 👋</h2>
+
+        <!-- Formulario de Login -->
+        <form action="/login" method="post">
+            
+          <style>
+input[name="usuario"] {
+  display: block;
+  margin: 0 auto;
+  width: 350px;
+  height: 30px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #09365a;
+  border-radius: 6px;
+}
+</style>
+
+<p>Usuario:</p>
+<input type="text" name="usuario" placeholder="Escribe tu Usuario" required>
+
+<style>
+input[name="contrasena"] {
+  display: block;
+  margin: 0 auto;
+  width: 350px;
+  height: 30px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #09365a;
+  border-radius: 6px;
+}
+</style>
+
+            <p>Contraseña:</p>
+            <input type="password" name="contrasena" placeholder="Escribe tu Contraseña" required>
+
+            <button type="submit" class="btn-primary">Iniciar sesión</button>
+        </form>
+
+        <p>--------¿Eres admin y no cuentas con tu contraseña?--------</p>
+        <p style="margin-left: 60px;">Ponte en contacto con tu ayuntamiento</p>
+    </div>
+
+    <footer>
+        &copy; 2025 Sistema de Atención Ciudadana. Todos los derechos reservados.
+    </footer>
+    <script>
+  const canvas = document.getElementById('fondoCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let width, height, iconos;
+
+   //const simbolos = ["📋", "📝", "🗂️", "📄", "✅"]; // Puedes agregar más
+
+  function initCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+
+    iconos = [];
+
+    for (let i = 0; i < 40; i++) {
+      iconos.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 24 + 20,
+        dx: (Math.random() - 0.5) * 0.4,
+        dy: (Math.random() - 0.5) * 0.4,
+        icon: simbolos[Math.floor(Math.random() * simbolos.length)]
+      });
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    iconos.forEach(obj => {
+      ctx.font = `${obj.size}px sans-serif`;
+      ctx.fillStyle = "#ffffffAA"; // Blanco translúcido
+      ctx.fillText(obj.icon, obj.x, obj.y);
+
+      obj.x += obj.dx;
+      obj.y += obj.dy;
+
+      if (obj.x < -50 || obj.x > width + 50) obj.dx *= -1;
+      if (obj.y < -50 || obj.y > height + 50) obj.dy *= -1;
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', initCanvas);
+  initCanvas();
+  animate();
+</script>
+
+</body>
+</html>

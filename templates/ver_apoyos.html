@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalles del Apoyo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ver_apoyo.css') }}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .contenedor {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #09365a;
+    }
+
+    .detalle-apoyo {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 10px 20px;
+      margin-top: 20px;
+    }
+
+    .detalle-apoyo label {
+      font-weight: bold;
+    }
+
+    .detalle-apoyo div {
+      padding: 4px 0;
+    }
+
+    .volver {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .volver a {
+      background: #09365a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .volver a:hover {
+      background: #0b4776;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+    <h1>Sistema de Solicitud y Atención Ciudadana</h1>
+    <h2>Detalles del Apoyo</h2>
+
+    {% if apoyo %}
+    <div class="detalle-apoyo">
+      <label>ID:</label><div>{{ apoyo.id }}</div>
+      <label>Nombre:</label><div>{{ apoyo.nombre }}</div>
+      <label>Descripción:</label><div>{{ apoyo.descripcion }}</div>
+      <label>Categoría:</label><div>{{ apoyo.categoria }}</div>
+      <label>Fecha de Inicio:</label><div>{{ apoyo.fecha_inicio }}</div>
+      <label>Fecha de Vencimiento:</label><div>{{ apoyo.fecha_vencimiento }}</div>
+      <label>Estado:</label><div>{{ apoyo.estado }}</div>
+    </div>
+    {% else %}
+    <p>No se encontraron datos del apoyo.</p>
+    {% endif %}
+
+    <div class="volver">
+      <a href="{{ url_for('apoyos') }}">← Volver a Apoyos</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #ddd;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.cabecera {
+    font-family: dm serif-text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.contenedor {
+  border-color: #09365a;
+height: 100px;
+padding-left: 40px;
+padding-right: 120px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.logo {
+  width: 140px;
+  height: 60px;
+  background-size: cover;
+  order: 0;
+  left: 50px;
+  margin-right: 50px;
+}
+
+h1 {
+  font-family: ´DM Serif Text´ ,serif;
+  background-size: cover;
+  font-size: 32px;
+  margin-top: 50px;
+  text-align: center;
+  color: #333;
+  order: 1;
+  flex-grow: 1;
+  padding-bottom: 60px;
+}
+h2 {
+     transform: translateX(140px);
+    font-family: ´DM Serif Text´ ,serif;
+  margin-top: 20px;
+  margin-top: 20px;
+}
+.filters {
+  display: flex;
+  justify-content: left;
+  gap: 20px;
+  margin: 20px;
+}
+
+.filters select {
+  transform: translateX(50px);
+  background-color: #005d66;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+.contenedor-filtros-busqueda {
+  transform: translateX(-150px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 20px;
+  gap: 20px;
+}
+
+.btn-filtro {
+  transform: translateX(200px);
+  background-color: #005b64;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filtro-contenedor {
+  position: relative;
+}
+
+.filtro-dropdown {
+  background-color: #a5c7ce;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 400px;
+  z-index: 10;
+}
+
+.filtro-titulo {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filtro-selects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filtro-selects select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.filtro-dropdown {
+  display: none;
+  position: relative; /* o absolute si quieres que flote */
+  z-index: 1000;
+  margin-bottom: 20px;
+}
+
+.filtro-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+
+.filtro-checkboxes label {
+  font-size: 14px;
+}
+
+.buscador input {
+  padding: 10px;
+  border: 1px solid #09365a;
+  border-radius: 25px;
+  width: 250px;
+  background-image: url('https://www.svgrepo.com/show/7109/search.svg');
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  padding-left: 35px;
+}
+
+table {
+  width: 80%;
+  height: 70%;
+  margin: auto;
+  border-collapse: collapse;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #5a0936;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  height: 60px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4),
+td:nth-child(5) {
+  font-weight: 500;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.edit {
+  color: teal;
+}
+
+.delete {
+  color: darkred;
+}
+
+.state {
+  font-weight: bold;
+}
+
+.activo {
+  color: green;
+}
+
+.proceso {
+  color: orange;
+}
+.vencido {
+    color: #eb0c0c;
+}
+
+.ver {
+    font-family: ´DM Serif Text´ ,serif;
+  text-align: center;
+  font-size: 18px;
+}
+
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination button {
+  margin: 0 4px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #dfecec;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.pagination .active {
+  background-color: #09365a;
+  color: white;
+}
+.active:hover {
+  color: white;
+   background-color: #5a0936;
+}
+a {
+  font-family: ´DM Serif Text´ ,serif;
+  background-size: cover;
+  font-size: 14px;
+  text-decoration: underline;
+  color: #690202;
+  order: 2;
+  margin-left: 50px;
+}
+
+a:hover {
+  color: #eb0c0c;
+}
+/* ======= Estilo general ======= */
+body {
+  font-family: 'DM Serif Text', serif; 
+  margin: 0;
+  padding: 0;
+}
+
+/* ======= Encabezado ======= */
+header {
+  display: flex;
+  padding: 20px;
+  background-color: #ddd;
+  position: relative;
+}
+
+/* ======= Barra superior ======= */
+.top-bar {
+  display:flex;
+   margin: -10px auto 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ddd;
+  position: relative;
+  z-index: 10;
+}
+
+/*Menú hamburguesa */
+.menu-hamburguesa {
+  transform: translateX(-240px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.menu-hamburguesa span {
+  
+  display: flex;
+  height: 4px;
+  background-color: black;
+  border-radius: 2px;
+}
+
+/* ======= Menú desplegable (oculto por defecto) ======= */
+.menu {
+  transform: translateX(-370px);
+  text-align: start;
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  width: 150px;
+  height: 400px;
+  padding: 5px;
+  background-color: #90aeb4;
+  list-style: none;
+  margin: 20px 0 0;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+}
+
+.menu.mostrar {
+  display: block; /* se muestra cuando tiene la clase .mostrar */
+}
+
+.menu li {
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  text-align: center;
+}
+
+.menu li:last-child {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.menu li:hover {
+  background-color: #09365a;
+}
+
+.menu li:hover a {
+  text-align: start;
+  color: white;
+}
+
+.menu a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  display: block;
+  text-align: left;
+}
+
+/* ======= Menú horizontal ======= */
+.menu-horizontal {
+   display: flex; /* necesario para que flexbox funcione */
+  width: 100%;
+  height: 50%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.menu-horizontal a {
+  display: flex;
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.menu-horizontal a:hover {
+  background-color: #09365a;
+  color: white;
+}
+
+

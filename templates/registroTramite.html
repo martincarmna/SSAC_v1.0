@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registrar Trámite</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='registrotramite.css') }}" />
+</head>
+<body>
+
+  <!-- Encabezado superior -->
+   <div class="contenedor">
+        <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+        <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
+        <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo">
+    </div>
+
+  <!-- Contenedor central del formulario -->
+  <div class="form-container">
+    <h2>Registrar nuevo trámite</h2>
+
+    <form class="tramite-form" method="POST" action="{{ url_for('guardar_tramite') }}">
+
+      <div class="form-left">
+        <div class="form-group">
+          <label>Nombre del Trámite</label>
+          <input type="text" name="nombre" placeholder="Nombre del trámite" required />
+        </div>
+
+        <div class="form-group">
+          <label>Modalidad</label>
+          <input type="text" name="modalidad" placeholder="Presencial, en línea, etc." />
+        </div>
+
+        <div class="form-group">
+          <label>Documento que se expide</label>
+          <input type="text" name="documento_expide" placeholder="Ej. Constancia, Certificado..." />
+        </div>
+
+        <div class="form-group">
+          <label>Vigencia</label>
+          <input type="text" name="vigencia" placeholder="Ej. 1 año, Permanente..." />
+        </div>
+      </div>
+
+      <div class="form-right">
+        <div class="form-group">
+          <label>Dependencia</label>
+          <input type="text" name="dependencia" placeholder="Nombre de la dependencia" />
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de Trámite</label>
+          <input type="text" name="tipo_tramite" placeholder="Ej. Licencia, Permiso..." />
+        </div>
+
+        <div class="form-group">
+          <label>Costo</label>
+          <input type="number" step="0.01" name="costo" placeholder="Ej. 120.50" />
+        </div>
+
+        <div class="form-group">
+          <label>Formato de Pago</label>
+          <input type="text" name="formato_pago" placeholder="Ej. Efectivo, tarjeta..." />
+        </div>
+
+        <div class="form-group">
+          <label>Estado</label>
+          <select name="estado">
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn save">Guardar</button>
+        <a href="{{ url_for('tramites') }}" class="btn cancel">Cancelar</a>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

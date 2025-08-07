@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editar Ciudadano</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='editar_registro.css') }}">
+</head>
+<body>
+
+  <div class="contenedor">
+    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
+    <img src="{{ url_for('static', filename='logoP.jfif') }}" alt="logo del Sistema" class="logo">
+  </div>
+
+  <h2>Editar Ciudadano</h2>
+
+  <form action="{{ url_for('editar_registro', id=ciudadano.id) }}" method="POST" class="formulario">
+    <div class="columna">
+      <p9 for="campo2">Nombre:</p9>
+      <input type="text" id="campo2" name="campo2" value="{{ ciudadano.nombre }}">
+
+      <p8 for="campo3">Apellido Paterno:</p8>
+      <input type="text" id="campo3" name="campo3" value="{{ ciudadano.apellido_paterno }}">
+
+      <p4 for="campo4">Apellido Materno:</p4>
+      <input type="text" id="campo4" name="campo4" value="{{ ciudadano.apellido_materno }}">
+
+      <p5 for="campo5">Fecha de Nacimiento:</p5>
+      <input type="date" id="campo5" name="campo5" value="{{ ciudadano.fecha_nacimiento }}">
+    </div>
+
+    <div class="columna">
+      <p6 for="campo6">CURP:</p6>
+      <input type="text" id="campo6" name="campo6" value="{{ ciudadano.curp }}">
+
+      <p7 for="campo7">RFC:</p7>
+      <input type="text" id="campo7" name="campo7" value="{{ ciudadano.rfc }}">
+
+      <p10 for="campo10">Correo electrónico:</p10>
+      <input type="email" id="campo10" name="campo10" value="{{ ciudadano.correo }}">
+
+      <p15 for="campo11">Domicilio:</p15>
+      <input type="text" id="campo11" name="campo11" value="{{ ciudadano.domicilio }}">
+
+      <p12 for="campo12">Celular:</p12>
+      <input type="text" id="campo12" name="campo12" value="{{ ciudadano.celular }}">
+    </div>
+
+    <div class="columna">
+      <p13 for="campo13">C.P.:</p13>
+      <select id="campo13" name="campo13">
+        <option value="90490" {% if ciudadano.cp == '90490' %}selected{% endif %}>90490</option>
+        <option value="90460" {% if ciudadano.cp == '90460' %}selected{% endif %}>90460</option>
+      </select>
+
+      <p14 for="campo14">Género:</p14>
+      <select id="campo14" name="campo14">
+        <option value="Masculino" {% if ciudadano.genero == 'Masculino' %}selected{% endif %}>Masculino</option>
+        <option value="Femenino" {% if ciudadano.genero == 'Femenino' %}selected{% endif %}>Femenino</option>
+      </select>
+
+      <button type="submit" class="btn-primaryG">Guardar Cambios</button>
+      <a href="{{ url_for('ver') }}" class="btn-primaryC">Cancelar</a>
+    </div>
+  </form>
+
+</body>
+</html>

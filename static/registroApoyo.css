@@ -1,0 +1,175 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #ddd;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.caja{
+  background-color: #ddd;
+    position: relative;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+}
+.contenedor {
+    height: 100px;
+padding-left: 40px;
+padding-right: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  width: 140px;
+  height: 60px;
+  background-size: cover;
+  order: 0;
+  left: 50px;
+  margin-right: 50px;
+}
+
+/* Título principal */
+h1 {
+    font-family: ´DM Serif Text´ ,serif;
+    margin: 50px auto 0 auto;
+    text-align: center;
+    color: black;
+    order: 1;
+  flex-grow: 1;
+  padding-bottom: 60px;
+}
+a {
+  font-family: ´DM Serif Text´ ,serif;
+  background-size: cover;
+  font-size: 14px;
+  text-decoration: underline;
+  color: #690202;
+  order: 2;
+  margin-left: 50px;
+}
+
+a:hover {
+  color: #eb0c0c;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+.registro-apoyo {
+  max-width: 700px;
+  margin: auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.negrita {
+  font-weight: bold;
+}
+
+.formulario-apoyo {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.imagen-previa {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.imagen-previa img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.fila input, .fila select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.fecha-vencimiento {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fecha-vencimiento label {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.documentacion {
+  display: flex;
+  justify-content: start;
+}
+
+.btn-pdf {
+  background-color: #ffffff;
+  border: 2px solid #005b64;
+  color: #005b64;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-guardar {
+  background-color: #005b64;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 150px;
+  align-self: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ver Trámites</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='tramites.css') }}" />
+  <style>
+    .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
+    .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
+    .filtro-dropdown { display:none; margin-bottom:20px; background:#fff; border:1px solid #ccc; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1000; }
+    .filtro-checkboxes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+    <a href="http://127.0.0.1:5000/">Cerrar sesión</a>
+    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
+  </div>
+<header>
+    <div class="top-bar">
+      <div class="menu-hamburguesa" id="btn-menu">
+        <span></span><span></span><span></span>
+      </div>
+
+      <ul class="menu" id="menu">
+        <li><a href="#">Ver Tramite</a></li>
+        <li><a href="{{ url_for('registroTramite') }}">Registrar Tramite </a></li>
+        <li><a href="#">Solicitudes de Tramites</a></li>
+      </ul>
+
+      <nav class="menu-horizontal">
+        <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
+        <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
+        <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
+        <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
+      </nav>
+    </div>
+  </header>
+  
+
+  <h2> Ver Trámites</h2>
+
+  <form method="GET" action="/tramites" id="formFiltros">
+    <div class="contenedor-filtros-busqueda">
+      <button type="button" class="btn-filtro" id="btnFiltro">Opciones de Filtrado</button>
+
+      <div class="filtro-dropdown" id="filtroDropdown">
+        <div class="filtro-selects">
+          <select name="estado">
+            <option value="">Estado</option>
+            <option value="Activo" {% if estado == 'Activo' %}selected{% endif %}>Activo</option>
+            <option value="Inactivo" {% if estado == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+          </select>
+        </div>
+
+        <div class="filtro-checkboxes">
+          <label><input type="checkbox" checked /> ID</label>
+          <label><input type="checkbox" checked /> Nombre del Trámite</label>
+          <label><input type="checkbox" checked /> Dependencia</label>
+          <label><input type="checkbox" checked /> Modalidad</label>
+          <label><input type="checkbox" checked /> Tipo de Trámite</label>
+          <label><input type="checkbox" checked /> Costo</label>
+          <label><input type="checkbox" checked /> Formato de pago</label>
+          <label><input type="checkbox" checked /> Estado</label>
+          <label><input type="checkbox" checked /> Documento que se expide</label>
+          <label><input type="checkbox" checked /> Vigencia</label>
+        </div>
+      </div>
+
+      <div class="buscador" style="margin-left: 20px;">
+        <input
+          type="text"
+          name="busqueda"
+          placeholder="Buscar trámite..."
+          value="{{ busqueda }}"
+          autocomplete="off"
+        />
+        <button type="submit">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 100%;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre del Trámite</th>
+        <th>Dependencia</th>
+        <th>Modalidad</th>
+        <th>Tipo de Trámite</th>
+        <th>Costo</th>
+        <th>Formato de pago</th>
+        <th>Estado</th>
+        <th>Documento que se expide</th>
+        <th>Vigencia</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tramite in tramites %}
+      <tr>
+        <td>{{ tramite.id }}</td>
+        <td>{{ tramite.nombre }}</td>
+        <td>{{ tramite.dependencia }}</td>
+        <td>{{ tramite.modalidad }}</td>
+        <td>{{ tramite.tipo_tramite }}</td>
+        <td>{{ tramite.costo }}</td>
+        <td>{{ tramite.formato_pago }}</td>
+        <td>{{ tramite.estado }}</td>
+        <td>{{ tramite.documento_expide }}</td>
+        <td>{{ tramite.vigencia }}</td>
+        <td>
+          <a href="{{ url_for('editar_tramite', id=tramite.id) }}" title="Editar">👁️</a>
+        </td>
+        <td>
+          <form method="post" action="{{ url_for('eliminar_tramite', id=tramite.id) }}" style="display:inline;">
+            <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este trámite?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="12" style="text-align:center;">No se encontraron resultados.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script src="{{ url_for('static', filename='apoyoburger.js') }}"></script>
+</body>
+</html>

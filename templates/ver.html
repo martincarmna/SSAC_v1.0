@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ver Ciudadanos</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ver.css') }}" />
+  <style>
+    .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
+    .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
+    .filtro-dropdown { display:none; margin-bottom:20px; background:#fff; border:1px solid #ccc; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1000; }
+    .filtro-checkboxes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+    <a href="http://127.0.0.1:5000/">Cerrar sesión</a>
+    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
+  </div>
+
+  <nav class="menu-horizontal">
+    <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
+    <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
+    <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
+    <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
+  </nav>
+
+  <h2 style="display: flex; align-items: center; gap: 10px;">
+    Ver Ciudadanos
+    <a href="/registro" title="Agregar ciudadano" style="text-decoration: none;">
+      <img src="{{ url_for('static', filename='agregarciu.png') }}" alt="Agregar" style="width: 24px; height: 24px; vertical-align: middle;">
+    </a>
+  </h2>
+
+  <form method="GET" action="/ver" id="formFiltros">
+    <div class="contenedor-filtros-busqueda">
+      <button type="button" class="btn-filtro" id="btnFiltro">Opciones de Filtrado</button>
+
+      <div class="filtro-dropdown" id="filtroDropdown" style="display:none; margin-top:10px;">
+        <div class="filtro-selects">
+          <select name="genero">
+            <option value="">Género</option>
+            <option value="Masculino" {% if genero == 'Masculino' %}selected{% endif %}>Masculino</option>
+            <option value="Femenino" {% if genero == 'Femenino' %}selected{% endif %}>Femenino</option>
+          </select>
+        </div>
+
+        <div class="filtro-checkboxes" style="margin-top: 10px;">
+          <label><input type="checkbox" checked /> ID</label>
+          <label><input type="checkbox" checked /> Nombre</label>
+          <label><input type="checkbox" checked /> Apellido Paterno</label>
+          <label><input type="checkbox" checked /> Apellido Materno</label>
+          <label><input type="checkbox" checked /> Fecha de nacimiento</label>
+          <label><input type="checkbox" checked /> Teléfono</label>
+          <label><input type="checkbox" checked /> CURP</label>
+          <label><input type="checkbox" checked /> RFC</label>
+          <label><input type="checkbox" checked /> Estado Civil</label>
+          <label><input type="checkbox" checked /> CP</label>
+          <label><input type="checkbox" checked /> Correo</label>
+          <label><input type="checkbox" checked /> Dirección</label>
+          <label><input type="checkbox" checked /> NSS</label>
+        </div>
+      </div>
+
+      <div class="buscador" style="margin-left: 20px;">
+        <input
+          type="text"
+          name="busqueda"
+          placeholder="Buscar en Ciudadanos..."
+          value="{{ busqueda }}"
+          autocomplete="off"
+        />
+        <button type="submit">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 100%;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>CURP</th>
+        <th>Género</th>
+        <th>Fecha de Nacimiento</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>RFC</th>
+        <th>Dirección</th>
+        <th>C.P.</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in ciudadanos %}
+      <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.apellido_paterno }}</td>
+        <td>{{ c.apellido_materno }}</td>
+        <td>{{ c.curp }}</td>
+        <td>{{ c.genero }}</td>
+        <td>{{ c.fecha_nacimiento }}</td>
+        <td>{{ c.correo }}</td>
+        <td>{{ c.celular }}</td>
+        <td>{{ c.rfc }}</td>
+        <td>{{ c.domicilio }}</td>
+        <td>{{ c.cp }}</td>
+        <td>
+  <a href="{{ url_for('editar_registro', id=c.id) }}" title="Editar">👁️</a>
+</td>
+<td>
+  <form method="post" action="{{ url_for('eliminar_ciudadano', id=c.id) }}" style="display:inline;">
+    <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este ciudadano?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
+  </form>
+</td>
+
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="14" style="text-align:center;">No se encontraron resultados.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script src="{{ url_for('static', filename='ver.js') }}"></script>
+</body>
+</html>
