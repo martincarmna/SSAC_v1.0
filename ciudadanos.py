@@ -191,6 +191,12 @@ def ver_apoyos(id):
         return render_template('ver_apoyos.html', apoyo=apoyo, request=request)
     except Exception as e:
         return f"Error al mostrar detalles: {e}"
+@app.route('/solicitudes_apoyo')
+def solicitarApoyo():
+    return render_template('solicitudes_apoyo.html')
+
+
+
 
 # --- TRÁMITES ---
 @app.route('/tramites')
