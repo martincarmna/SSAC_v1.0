@@ -124,7 +124,26 @@ def login():
             return "<h3>Credenciales inválidas. Intenta nuevamente.</h3>"
     except Exception as e:
         return f"Error al iniciar sesión: {e}"
+from flask import Flask, render_template, request, redirect, url_for
 
+# ... (código de tu aplicación)
+
+@app.route('/solicitar_ciudadano/<int:id>')
+def solicitar_ciudadano(id):
+    tipo_solicitud = request.args.get('tipo_solicitud')
+    if tipo_solicitud:
+        # Aquí es donde pondrías la lógica para redirigir al usuario
+        # en función del tipo de solicitud que eligió.
+        if tipo_solicitud == 'servicios':
+            return redirect(url_for('servicios'))
+        elif tipo_solicitud == 'apoyos':
+            return redirect(url_for('apoyos'))
+        elif tipo_solicitud == 'tramites':
+            return redirect(url_for('tramites'))
+    # Si no se seleccionó nada o algo falla, puedes redirigir a ver ciudadanos
+    return redirect(url_for('ver_ciudadanos'))
+
+# ... (el resto de tus rutas)
 # --- APOYOS ---
 @app.route('/apoyos')
 def apoyos():
@@ -342,6 +361,8 @@ def eliminar_servicio(id):
         return redirect('/servicios')
     except Exception as e:
         return f"Error al eliminar servicio: {e}"
+
+
 
 
 if __name__ == '__main__':

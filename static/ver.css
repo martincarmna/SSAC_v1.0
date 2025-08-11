@@ -298,3 +298,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.menu-horizontal {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 200px; /* mueve el nav bar 90px a la derecja (.contenedor) */
+  width: 100%;
+}

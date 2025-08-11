@@ -380,4 +380,7 @@ header {
   color: white;
 }
 
+.menu-horizontal {
+  transform: translateX(-49px); /* mueve el nav bar completo 30px a la izquierda */
+}
 

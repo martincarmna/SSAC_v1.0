@@ -14,6 +14,13 @@
         <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo">
     </div>
 
+    <nav>
+    <a href="{{ url_for('ver') }}">CIUDADANOS</a>
+    <a href="{{ url_for('servicios') }}">SERVICIOS</a>
+    <a href="{{ url_for('apoyos') }}">APOYOS</a>
+    <a href="{{ url_for('tramites') }}" class = activate>TRÁMITES</a>
+  </nav>
+
   <!-- Contenedor central del formulario -->
   <div class="form-container">
     <h2>Registrar nuevo trámite</h2>

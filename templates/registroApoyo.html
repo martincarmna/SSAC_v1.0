@@ -1,123 +1,86 @@
-<!-- apoyos.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Apoyos</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='apoyos.css') }}">
-  <style>
-    .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
-    .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
-    .filtro-dropdown { display:none; margin-bottom:20px; background:#fff; border:1px solid #ccc; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1000; }
-    .filtro-checkboxes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuevo Apoyo - SSAC</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='nuevo_servicio.css') }}" />
 </head>
 <body>
-  <div class="contenedor">
-    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
-    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
-    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
+
+  <header>Sistema de Solicitud y Atención Ciudadana</header>
+
+  <nav>
+    <a href="{{ url_for('ver') }}">CIUDADANOS</a>
+    <a href="{{ url_for('servicios') }}">SERVICIOS</a>
+    <a href="{{ url_for('apoyos') }}" class="active">APOYOS</a>
+    <a href="{{ url_for('tramites') }}">TRÁMITES</a>
+  </nav>
+
+  <div class="container">
+    <h2>Nuevo Apoyo</h2>
+
+    <form method="POST" action="{{ url_for('guardar_apoyo') }}">
+
+      <div class="image-placeholder">
+        <img src="https://via.placeholder.com/100?text=+" alt="Imagen del apoyo" />
+      </div>
+
+      <div class="form-group">
+        <label>ID</label>
+        <input type="text" placeholder="ID automático" disabled />
+      </div>
+
+      <div class="form-group">
+        <label>Nombre del Apoyo</label>
+        <input type="text" name="nombre" required />
+      </div>
+
+      <div class="form-group">
+        <label>Nombre del Encargado</label>
+        <input type="text" name="encargado" required />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo Apoyo</label>
+        <select name="tipo_apoyo" required>
+          <option value="">Seleccione...</option>
+          <option value="tipo1">pollos</option>
+          <option value="tipo2">tinacos</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Costo</label>
+        <div class="cost-input">
+          <button type="button" onclick="decrease()">−</button>
+          <input type="number" name="costo" id="cost" value="10" min="0" />
+          <button type="button" onclick="increase()">+</button>
+        </div>
+      </div>
+
+      <div class="pdf-links">
+        <a href="#"><img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" />Hoja de solicitud del servicio</a>
+        <a href="#"><img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" />Documentación y especificaciones</a>
+      </div>
+
+      <button type="submit" class="submit-btn">Guardar</button>
+    </form>
   </div>
 
-  <header>
-    <div class="top-bar">
-      <div class="menu-hamburguesa" id="btn-menu">
-        <span></span><span></span><span></span>
-      </div>
+  <script>
+    function increase() {
+      const input = document.getElementById('cost');
+      input.value = parseInt(input.value) + 1;
+    }
 
-      <ul class="menu" id="menu">
-        <li><a href="#">Ver Apoyo</a></li>
-        <li><a href="{{ url_for('registroApoyo') }}">Registrar Apoyo</a></li>
-        <li><a href="{{ url_for('SolicitarApoyo')}}">Solicitar de Apoyo</a></li>
-        <li><a href="#">Vista previa de Apoyos</a></li>
-      </ul>
+    function decrease() {
+      const input = document.getElementById('cost');
+      if (parseInt(input.value) > 0) {
+        input.value = parseInt(input.value) - 1;
+      }
+    }
+  </script>
 
-      <nav class="menu-horizontal">
-        <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
-        <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
-        <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
-        <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
-      </nav>
-    </div>
-  </header>
-
-  <h2>Ver Apoyos</h2>
-  <form method="GET" action="/ver" id="formFiltros">
-    <div class="contenedor-filtros-busqueda">
-      <button type="button" class="btn-filtro" id="btnFiltro">Opciones de Filtrado</button>
-
-      <div class="filtro-dropdown" id="filtroDropdown" style="display:none; margin-top:10px;">
-        <div class="filtro-selects">
-          <select name="genero">
-            <option value="">Género</option>
-            <option value="Masculino" {% if genero == 'Masculino' %}selected{% endif %}>Masculino</option>
-            <option value="Femenino" {% if genero == 'Femenino' %}selected{% endif %}>Femenino</option>
-          </select>
-        </div>
-
-        <div class="filtro-checkboxes" style="margin-top: 10px;">
-          <label><input type="checkbox" checked /> ID</label>
-          <label><input type="checkbox" checked /> Nombre</label>
-          <label><input type="checkbox" checked /> Apellido Paterno</label>
-          <label><input type="checkbox" checked /> Apellido Materno</label>
-          <label><input type="checkbox" checked /> Fecha de nacimiento</label>
-          <label><input type="checkbox" checked /> Teléfono</label>
-          <label><input type="checkbox" checked /> CURP</label>
-          <label><input type="checkbox" checked /> RFC</label>
-          <label><input type="checkbox" checked /> Estado Civil</label>
-          <label><input type="checkbox" checked /> CP</label>
-          <label><input type="checkbox" checked /> Correo</label>
-          <label><input type="checkbox" checked /> Dirección</label>
-          <label><input type="checkbox" checked /> NSS</label>
-        </div>
-      </div>
-
-      <div class="buscador" style="margin-left: 20px;">
-        <input
-          type="text"
-          name="busqueda"
-          placeholder="Buscar en Ciudadanos..."
-          value="{{ busqueda }}"
-          autocomplete="off"
-        />
-        <button type="submit">Buscar</button>
-      </div>
-    </div>
-  </form>
-
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre del Apoyo</th>
-        <th>Categoría</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Vencimiento</th>
-        <th>Editar</th>
-        <th>Estado</th>
-        <th>Ver</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for apoyo in apoyos %}
-      <tr>
-        <td>{{ apoyo.id }}</td>
-        <td>{{ apoyo.nombre }}</td>
-        <td>{{ apoyo.categoria }}</td>
-        <td>{{ apoyo.fecha_inicio }}</td>
-        <td>{{ apoyo.fecha_vencimiento }}</td>
-        <td>
-          <a href="/editar_apoyo/{{ apoyo.id }}">✏️</a>
-        </td>
-        <td class="state {{ apoyo.estado|lower }}">{{ apoyo.estado }}</td>
-        <td>
-          <a href="/ver_apoyo/{{ apoyo.id }}">👁️</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <script src="{{ url_for('static', filename='apoyoburger.js') }}"></script>
 </body>
 </html>

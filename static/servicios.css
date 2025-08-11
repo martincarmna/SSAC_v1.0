@@ -386,5 +386,7 @@ header {
   border-radius: 4px;
 }
 
-
+.menu-horizontal {
+  transform: translateX(-29px); /* mueve el nav bar completo 29px a la derecha */
+}
 

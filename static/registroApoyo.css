@@ -5,14 +5,16 @@
     box-sizing: border-box;
 }
 body {
-    background-color: #ddd;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  background-color: #f9f9f9;
+}
+
+nav {
+  background-color: #f9f9f9;
+  border-bottom: 2px solid #09365a;
 }
 
 .caja{
-  background-color: #ddd;
+  background-color:#ddd;
     position: relative;
     width: 100%;
     align-items: center;
@@ -59,10 +61,6 @@ a {
 
 a:hover {
   color: #eb0c0c;
-}
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
 }
 
 .registro-apoyo {
