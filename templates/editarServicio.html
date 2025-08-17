@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuevo Servicio - SAC</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='nuevo_servicio.css') }}" />
+  <title>Editar Servicio - SSAC</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='editar_servicio.css') }}" />
 </head>
 <body>
 
@@ -18,9 +18,9 @@
   </nav>
 
   <div class="container">
-    <h2>Nuevo Servicio</h2>
+    <h2>Editar Servicio</h2>
 
-    <form method="POST" action="{{ url_for('guardar_servicio') }}">
+    <form method="POST" action="{{ url_for('editar_servicio', id=servicio.id) }}">
 
       <div class="image-placeholder">
         <img src="https://via.placeholder.com/100?text=+" alt="Imagen de servicio" />
@@ -28,25 +28,25 @@
 
       <div class="form-group">
         <label>ID</label>
-        <input type="text" placeholder="ID automático" disabled />
+        <input type="text" value="{{ servicio.id }}" disabled />
       </div>
 
       <div class="form-group">
         <label>Nombre del servicio</label>
-        <input type="text" name="nombre" required />
+        <input type="text" name="nombre" value="{{ servicio.nombre }}" required />
       </div>
 
       <div class="form-group">
         <label>Nombre del Encargado</label>
-        <input type="text" name="encargado" required />
+        <input type="text" name="encargado" value="{{ servicio.encargado }}" required />
       </div>
 
       <div class="form-group">
-        <label>Tipo Servicio</label>
-        <select name="tipo_servicio" required>
+       <select name="tipo_servicio" required>
           <option value="">Seleccione...</option>
-          <option value="tipo1">agua Potable</option>
-          <option value="tipo2">alumbrado Publico</option>
+          <option value="Agua Potable" {% if servicio.tipo_servicio == 'Agua Potable' %}selected{% endif %}>Agua Potable</option>
+          <option value="Alumbrado Público" {% if servicio.tipo_servicio == 'Alumbrado Público' %}selected{% endif %}>Alumbrado Público</option>
+          <option value="Limpia Pública" {% if servicio.tipo_servicio == 'Limpia Pública' %}selected{% endif %}>Limpia Pública</option>
         </select>
       </div>
 
@@ -54,9 +54,17 @@
         <label>Costo</label>
         <div class="cost-input">
           <button type="button" onclick="decrease()">−</button>
-          <input type="number" name="costo" id="cost" value="10" min="0" />
+          <input type="number" name="costo" id="cost" value="{{ servicio.costo }}" min="0" />
           <button type="button" onclick="increase()">+</button>
         </div>
+      </div>
+
+      <div class="form-group">
+          <label>Estado</label>
+          <select name="estado">
+            <option value="Activo" {% if servicio.estado == 'Activo' %}selected{% endif %}>Activo</option>
+            <option value="Inactivo" {% if servicio.estado == 'Inactivo' %}selected{% endif %}>Inactivo</option>
+          </select>
       </div>
 
       <div class="pdf-links">

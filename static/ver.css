@@ -190,6 +190,33 @@ h2 {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
+/* Estilos añaden panel filtrado */
+  .filtro-panel {
+    position: absolute;
+    margin-top: 8px;
+    background: rgba(100,140,150,0.7);
+    border-radius: 12px;
+    padding: 1rem 2rem 2rem 2rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: none;
+    max-width: 850px;
+    z-index: 20;
+  }
+  .filtro-panel label, .filtro-panel select {
+    margin-right: 1rem;
+  }
+  .filtro-campos {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 0.35rem 3rem;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  .filtro-campos label {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+  }
 
 table {
    margin: 3px auto 0 auto;

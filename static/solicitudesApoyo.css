@@ -385,3 +385,157 @@ header {
 }
 
 
+filtro-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+
+
+.filtro-checkboxes label {
+  font-size: 14px;
+}
+
+.buscador input {
+  padding: 10px;
+  border: 1px solid #09365a;
+  border-radius: 25px;
+  width: 250px;
+  background-image: url('https://www.svgrepo.com/show/7109/search.svg');
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  padding-left: 35px;
+}
+
+table {
+  width: 80%;
+  height: 70%;
+  margin: auto;
+  border-collapse: collapse;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #5a0936;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  height: 60px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4),
+td:nth-child(5) {
+  font-weight: 500;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.edit {
+  color: teal;
+}
+
+.delete {
+  color: darkred;
+}
+
+.state {
+  font-weight: bold;
+}
+
+.activo {
+  color: green;
+}
+
+.proceso {
+  color: orange;
+}
+.vencido {
+    color: #eb0c0c;
+}
+
+.ver {
+    font-family: 'DM Serif Text' ,serif;
+  text-align: center;
+  font-size: 18px;
+}
+
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination button {
+  margin: 0 4px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #dfecec;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.pagination .active {
+  background-color: #09365a;
+  color: white;
+}
+.active:hover {
+  color: white;
+   background-color: #5a0936;
+}
+a {
+  font-family: 'DM Serif Text' ,serif;
+  background-size: cover;
+  font-size: 14px;
+  text-decoration: underline;
+  color: #690202;
+  order: 2;
+  margin-left: 50px;
+}
+
+a:hover {
+  color: #eb0c0c;
+}
+/* ======= Estilo general ======= */
+body {
+  font-family: 'DM Serif Text', serif; 
+  margin: 0;
+  padding: 0;
+}
+
+/* ======= Encabezado ======= */
+header {
+  display: flex;
+  padding: 20px;
+  background-color: #ddd;
+  position: relative;
+}
+
+/* ======= Barra superior ======= */
+.top-bar {
+  display:flex;
+   margin: -10px auto 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ddd;
+  position: relative;
+  z-index: 10; 
+}

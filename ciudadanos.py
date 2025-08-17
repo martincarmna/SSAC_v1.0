@@ -210,9 +210,21 @@ def ver_apoyos(id):
         return render_template('ver_apoyos.html', apoyo=apoyo, request=request)
     except Exception as e:
         return f"Error al mostrar detalles: {e}"
+
+#@app.route('/solicitudes_apoyo')
+#def solicitarApoyo():
+    #return render_template('solicitudes_apoyo.html')
+
+
 @app.route('/solicitudes_apoyo')
-def solicitarApoyo():
-    return render_template('solicitudes_apoyo.html')
+def solicitudesApoyo():
+    # Aquí puedes traer los datos desde la DB o poner lista vacía
+    solicitudes = [
+        {"id": 1, "nombre_apoyo": "Beca Educativa", "solicitante": "Juan Pérez", "fecha": "2025-08-14", "estado": "Pendiente"},
+        {"id": 2, "nombre_apoyo": "Apoyo Alimentario", "solicitante": "Ana López", "fecha": "2025-08-13", "estado": "Aprobado"},
+    ]
+    return render_template('solicitudesApoyo.html', solicitudes=solicitudes)
+
 
 
 
@@ -289,6 +301,16 @@ def eliminar_tramite(id):
         return redirect('/tramites')
     except Exception as e:
         return f"Error al eliminar trámite: {e}"
+    
+@app.route('/solicitudesTramite')
+def solicitudesTramite():
+    # Aquí puedes traer los datos desde la DB o poner lista vacía
+    solicitudes = [
+        {"id": 1, "nombre_apoyo": "Beca Educativa", "solicitante": "Juan Pérez", "fecha": "2025-08-14", "estado": "Pendiente"},
+        {"id": 2, "nombre_apoyo": "Apoyo Alimentario", "solicitante": "Ana López", "fecha": "2025-08-13", "estado": "Aprobado"},
+    ]
+    return render_template('solicitudesTramite.html', solicitudes=solicitudes)  
+    
 
 # --- SERVICIOS ---
 @app.route('/servicios')
@@ -302,9 +324,9 @@ def servicios():
     except Exception as e:
         return f"Error al obtener servicios: {e}"
 
-@app.route('/nuevo_registro')
+@app.route('/nuevo_servicio')
 def nuevo_registro():
-    return render_template('nuevo_registro.html', request=request)
+    return render_template('nuevo_servicio.html', request=request)
 
 @app.route('/guardar_servicio', methods=['POST'])
 def guardar_servicio():
@@ -317,7 +339,7 @@ def guardar_servicio():
                     VALUES (%s, %s, %s, %s)
                 """, (
                     d.get('nombre'),
-                    d.get('tipo'),
+                    d.get('tipo_servicio'),
                     d.get('costo'),
                     d.get('estado')
                 ))
@@ -335,11 +357,12 @@ def editar_servicio(id):
                 d = request.form
                 with conn.cursor() as c:
                     c.execute("""
-                        UPDATE servicios SET nombre=%s, tipo=%s, costo=%s, estado=%s
+                        UPDATE servicios
+                        SET nombre=%s, tipo_servicio=%s, costo=%s, estado=%s
                         WHERE id=%s
                     """, (
-                        d.get('nombre'), d.get('tipo'), d.get('costo'),
-                         d.get('estado'), id
+                        d.get('nombre'), d.get('tipo_servicio'), d.get('costo'),
+                        d.get('estado'), id
                     ))
                 conn.commit()
                 return redirect('/servicios')
@@ -350,6 +373,7 @@ def editar_servicio(id):
                 return render_template('nuevo_registro.html', servicio=servicio, request=request)
     except Exception as e:
         return f"Error al editar servicio: {e}"
+
 
 @app.route('/eliminar_servicio/<int:id>', methods=['POST'])
 def eliminar_servicio(id):

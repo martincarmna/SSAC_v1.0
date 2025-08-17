@@ -63,3 +63,11 @@ CREATE TABLE apoyos (
 );
 
 
+CREATE TABLE solicitudes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ciudadano_id INT,
+    apoyo_id INT,
+    fecha_solicitud DATE,
+    FOREIGN KEY (ciudadano_id) REFERENCES ciudadanos(id),
+    FOREIGN KEY (apoyo_id) REFERENCES apoyos(id)
+);

@@ -67,6 +67,7 @@ h1 {
   order: 1;
   flex-grow: 1;
   padding-bottom: 60px;
+  transform: translateX(-70px);
 }
 
 a {

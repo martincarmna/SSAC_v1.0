@@ -1,0 +1,128 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  background-color: white;
+  padding: 10px 0;
+  border-bottom: 2px solid #0c4d6c;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+nav a.active {
+  color: #0c4d6c;
+  border-bottom: 3px solid #0c4d6c;
+  padding-bottom: 5px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.cost-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cost-input input {
+  width: 60px;
+  text-align: center;
+}
+
+.cost-input button {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: none;
+  background-color: #0c4d6c;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pdf-links {
+  margin-top: 20px;
+}
+
+.pdf-links a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #0c4d6c;
+  margin-bottom: 10px;
+}
+
+.pdf-links img {
+  width: 24px;
+  margin-right: 10px;
+}
+
+.image-placeholder {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.image-placeholder img {
+  width: 100px;
+  opacity: 0.4;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #0c4d6c;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

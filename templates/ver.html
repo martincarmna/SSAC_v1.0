@@ -7,8 +7,67 @@
   <style>
     .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
     .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
-    .filtro-dropdown { display:none; margin-bottom:20px; background:#fff; border:1px solid #ccc; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1000; }
-    .filtro-checkboxes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
+
+    /* Panel de filtros (estilos que tú diste) */
+    .filtro-panel {
+      position: absolute;
+      margin-top: 8px;
+      background: rgba(100,140,150,0.7);
+      border-radius: 12px;
+      padding: 1rem 2rem 2rem 2rem;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      display: none;
+      max-width: 950px;
+      z-index: 20;
+    }
+    .filtro-panel label, .filtro-panel select {
+      margin-right: 1rem;
+    }
+    .filtro-campos {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+      gap: 0.35rem 3rem;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+    .filtro-campos label {
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+    }
+
+    /* Botones */
+    .btn-filtrado {
+      padding: 6px 10px;
+      background: #09365a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-buscar {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background: #0b6aa3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Buscador */
+    .buscador input[type="text"] {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    /* Tabla */
+    table { border-collapse: collapse; }
+    table th, table td { padding: 6px 8px; border: 1px solid #ddd; }
+
+    /* Consejo: contenedor relativo para que el panel absoluto se posicione respecto al botón */
+    .filtro-wrapper { position: relative; display: inline-block; }
   </style>
 </head>
 <body>
@@ -18,104 +77,261 @@
     <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
   </div>
 
-
-   <nav class="menu-horizontal">
+  <nav class="menu-horizontal" style="margin:10px 0;">
     <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
     <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
     <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
     <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
   </nav>
 
-  
-  <h2 style="display: flex; align-items: center; gap: 10px;">
+  <h2 style="display:flex; align-items:center; gap:10px;">
     Ver Ciudadanos
-    <a href="/registro" title="Agregar ciudadano" style="text-decoration: none;">
-      <img src="{{ url_for('static', filename='agregarciu.png') }}" alt="Agregar" style="width: 24px; height: 24px; vertical-align: middle;">
+    <a href="/registro" title="Agregar ciudadano" style="text-decoration:none;">
+      <img src="{{ url_for('static', filename='agregarciu.png') }}" alt="Agregar" style="width:24px; height:24px; vertical-align:middle;">
     </a>
   </h2>
 
-  <form method="GET" action="/ver" id="formFiltros">
-    <div class="contenedor-filtros-busqueda">
-      <button type="button" class="btn-filtro" id="btnFiltro">Opciones de Filtrado</button>
+  <!-- Botón que muestra el panel de filtros (envolvemos en filtro-wrapper para posicionamiento) -->
+  <div class="filtro-wrapper" style="margin-bottom:19px;">
+    <button id="btnFiltrado" class="btn-filtrado" aria-haspopup="true" aria-expanded="false">
+      &#128269; Opciones de Filtrado
+    </button>
 
+    <!-- Panel: Estado Civil, Género, checkboxes de columnas y botón aplicar -->
+    <div class="filtro-panel" id="panelFiltrado" role="region" aria-label="Panel de filtros">
+      <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        
 
+        <label for="filtroGenero">Género:</label>
+        <select id="filtroGenero" name="filtroGenero">
+          <option value="">Todos</option>
+          <option value="f">Femenino</option>
+          <option value="m">Masculino</option>
+        </select>
 
-      <div class="buscador" style="margin-left: 20px;">
-        <input
-          type="text"
-          name="busqueda"
-          placeholder="Buscar en Ciudadanos..."
-          value="{{ busqueda }}"
-          autocomplete="off"
-        />
-        <button type="submit">Buscar</button>
+        
+      </div>
+
+      <hr style="margin:10px 0; border:none; border-top:1px solid rgba(238, 26, 26, 0.1)">
+
+      <div class="filtro-campos" aria-label="Mostrar u ocultar columnas">
+        <!-- Cada checkbox llama a toggleColumna(index) -->
+        <label><input type="checkbox" checked onchange="toggleColumna(0)"> ID</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(1)"> Nombre</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(2)"> Apellido P.</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(3)"> Apellido M.</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(4)"> CURP</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(5)"> Género</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(6)"> Fecha Nac.</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(7)"> Correo</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(8)"> Teléfono</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(9)"> RFC</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(10)"> Dirección</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(11)"> C.P.</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(12)"> Editar</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(13)"> Eliminar</label>
+        <label><input type="checkbox" checked onchange="toggleColumna(14)"> Solicitudes</label>
+      </div>
+
+      <div style="margin-top:1rem; display:flex; gap:8px;">
+
+        <button type="button" onclick="cerrarPanel()" style="background:#ccc; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">Cerrar</button>
       </div>
     </div>
-  </form>
+  </div>
 
+  <!-- Buscador principal (fuera del panel) -->
+  <div class="buscador" style="margin-left: 8px; margin-bottom:12px;">
+    <input
+      type="text"
+      name="busqueda"
+      id="busquedaPrincipal"
+      placeholder="         Buscar en Ciudadanos..."
+      value="{{ busqueda }}"
+      autocomplete="off"
+      style="padding:6px; border-radius:6px; border:1px solid #ccc;"
+    />
+    <button type="button" class="btn-buscar" onclick="filtrarTabla()">Buscar</button>
+  </div>
 
-  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 100%;">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido Paterno</th>
-        <th>Apellido Materno</th>
-        <th>CURP</th>
-        <th>Género</th>
-        <th>Fecha de Nacimiento</th>
-        <th>Correo</th>
-        <th>Teléfono</th>
-        <th>RFC</th>
-        <th>Dirección</th>
-        <th>C.P.</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
-        <th>Solicitudes</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for c in ciudadanos %}
-      <tr>
-        <td>{{ c.id }}</td>
-        <td>{{ c.nombre }}</td>
-        <td>{{ c.apellido_paterno }}</td>
-        <td>{{ c.apellido_materno }}</td>
-        <td>{{ c.curp }}</td>
-        <td>{{ c.genero }}</td>
-        <td>{{ c.fecha_nacimiento }}</td>
-        <td>{{ c.correo }}</td>
-        <td>{{ c.celular }}</td>
-        <td>{{ c.rfc }}</td>
-        <td>{{ c.domicilio }}</td>
-        <td>{{ c.cp }}</td>
-        <td>
-          <a href="{{ url_for('editar_registro', id=c.id) }}" title="Editar">👁️</a>
-        </td>
-        <td>
-          <form method="post" action="{{ url_for('eliminar_ciudadano', id=c.id) }}" style="display:inline;">
-            <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este ciudadano?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
-          </form>
-        </td>
-        <td>
-          <form method="get" action="{{ url_for('solicitar_ciudadano', id=c.id) }}">
-            <select id="tipo_solicitud_{{ c.id }}" name="tipo_solicitud" onchange="this.form.submit()">
-              <option value="" selected>Ver Solicitudes...</option>
-              <option value="solicitudesServ">Servicios</option>
-              <option value="apoyos">Apoyos</option>
-              <option value="tramites">Trámites</option>
-            </select>
-          </form>
-        </td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="15" style="text-align:center;">No se encontraron resultados.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <!-- Tabla (igual que tu plantilla) -->
+  <table id="tablaCiudadanos" border="1" cellspacing="0" cellpadding="5" style="margin-top: 6px; width: 95%; margin-left: auto; margin-right: auto;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>CURP</th>
+        <th>Género</th>
+        <th>Fecha de Nacimiento</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>RFC</th>
+        <th>Dirección</th>
+        <th>C.P.</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+        <th>Solicitudes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in ciudadanos %}
+      <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.apellido_paterno }}</td>
+        <td>{{ c.apellido_materno }}</td>
+        <td>{{ c.curp }}</td>
+        <td>{{ c.genero }}</td>
+        <td>{{ c.fecha_nacimiento }}</td>
+        <td>{{ c.correo }}</td>
+        <td>{{ c.celular }}</td>
+        <td>{{ c.rfc }}</td>
+        <td>{{ c.domicilio }}</td>
+        <td>{{ c.cp }}</td>
+        <td><a href="{{ url_for('editar_registro', id=c.id) }}" title="Editar">👁️</a></td>
+        <td>
+          <form method="post" action="{{ url_for('eliminar_ciudadano', id=c.id) }}" style="display:inline;">
+            <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este ciudadano?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
+          </form>
+        </td>
+        <td>
+          <form method="get" action="{{ url_for('solicitar_ciudadano', id=c.id) }}">
+            <select id="tipo_solicitud_{{ c.id }}" name="tipo_solicitud" onchange="this.form.submit()">
+              <option value="" selected>Ver Solicitudes...</option>
+              <option value="solicitudesServ">Servicios</option>
+              <option value="apoyos">Apoyos</option>
+              <option value="tramites">Trámites</option>
+            </select>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr class="no-data">
+        <td colspan="15" style="text-align:center;">No se encontraron resultados.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-  <script src="{{ url_for('static', filename='ver.js') }}"></script>
+  <script>
+    // Referencias
+    const btnFiltrado = document.getElementById('btnFiltrado');
+    const panelFiltrado = document.getElementById('panelFiltrado');
+    const aplicarBtn = document.getElementById('aplicarFiltrosBtn');
+    const inputBusquedaPrincipal = document.getElementById('busquedaPrincipal');
+    const inputBusquedaPanel = document.getElementById('filtroTextoPanel');
+
+    // Mostrar/ocultar panel
+    btnFiltrado.addEventListener('click', () => {
+      const visible = panelFiltrado.style.display === 'block';
+      panelFiltrado.style.display = visible ? 'none' : 'block';
+      btnFiltrado.setAttribute('aria-expanded', String(!visible));
+    });
+
+    function cerrarPanel() {
+      panelFiltrado.style.display = 'none';
+      btnFiltrado.setAttribute('aria-expanded', 'false');
+    }
+
+    // Cerrar panel al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!panelFiltrado.contains(e.target) && !btnFiltrado.contains(e.target)) {
+        panelFiltrado.style.display = 'none';
+        btnFiltrado.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Aplicar filtros desde el panel
+    aplicarBtn.addEventListener('click', filtrarTabla);
+
+    // Filtrar en tiempo real desde buscador principal (opcional)
+    inputBusquedaPrincipal.addEventListener('input', filtrarTabla);
+    inputBusquedaPanel.addEventListener('input', filtrarTabla);
+
+    // Función para ocultar/mostrar columnas por índice (0-based)
+    function toggleColumna(numColumna) {
+      const tabla = document.querySelector('#tablaCiudadanos');
+      if (!tabla) return;
+      // Recorremos todas las filas (thead + tbody)
+      for (let r = 0; r < tabla.rows.length; r++) {
+        const cell = tabla.rows[r].cells[numColumna];
+        if (cell) {
+          // alternar display
+          cell.style.display = (cell.style.display === 'none') ? '' : 'none';
+        }
+      }
+    }
+
+    // Función principal de filtrado
+    function filtrarTabla() {
+      const estadoCivil = (document.getElementById('filtroEstadoCivil')?.value || '').toLowerCase();
+      const genero = (document.getElementById('filtroGenero')?.value || '').toLowerCase();
+      const textoBusqueda = (document.getElementById('busquedaPrincipal')?.value || '').toLowerCase();
+      const textoPanel = (document.getElementById('filtroTextoPanel')?.value || '').toLowerCase();
+
+      const tabla = document.getElementById('tablaCiudadanos');
+      const tbody = tabla.querySelector('tbody');
+
+      // Eliminar fila de "no-results" auto-creada si existe (para re-evaluar)
+      const existingNoResults = tbody.querySelector('tr.no-results-auto');
+      if (existingNoResults) existingNoResults.remove();
+
+      const filas = Array.from(tbody.querySelectorAll('tr'));
+      let visibles = 0;
+
+      filas.forEach(fila => {
+        // Si es la fila de template "No se encontraron..." (colspan único), la ignoramos para la evaluación
+        const celdas = fila.querySelectorAll('td');
+        if (celdas.length === 1 && fila.classList.contains('no-data')) {
+          fila.style.display = 'none'; // la controlamos manualmente con lógica
+          return;
+        }
+
+        // Accedemos a celdas por índice según tu tabla:
+        // 0: ID, 1: Nombre, 2: Apellido P, 3: Apellido M, 4: CURP, 5: Género, ...
+        const generoCelda = celdas[5] ? celdas[5].textContent.trim().toLowerCase() : '';
+        const filaTexto = fila.textContent.trim().toLowerCase();
+
+        // Estado civil: tu tabla actual no contiene explícitamente columna "estado civil".
+        // Por eso filtramos por estadoCivil buscando en todo el texto de la fila.
+        // Si agregas la columna estado_civil en el futuro, cambia esto por celdas[idxEstado].textContent...
+        const coincideEstado = !estadoCivil || filaTexto.includes(estadoCivil);
+        const coincideGenero = !genero || generoCelda === genero;
+        const coincideBusquedaGlobal = !textoBusqueda || filaTexto.includes(textoBusqueda);
+        const coincideBusquedaPanel = !textoPanel || filaTexto.includes(textoPanel);
+
+        if (coincideEstado && coincideGenero && coincideBusquedaGlobal && coincideBusquedaPanel) {
+          fila.style.display = '';
+          visibles++;
+        } else {
+          fila.style.display = 'none';
+        }
+      });
+
+      // Si no hay filas visibles, mostramos una fila de "no se encontraron resultados" dinámica
+      if (visibles === 0) {
+        const trNo = document.createElement('tr');
+        trNo.classList.add('no-results-auto');
+        const td = document.createElement('td');
+        td.setAttribute('colspan', '15');
+        td.style.textAlign = 'center';
+        td.textContent = 'No se encontraron resultados.';
+        trNo.appendChild(td);
+        tbody.appendChild(trNo);
+      }
+    }
+
+    // Ejecutar filtrado inicial por si hay un valor en el input (por ejemplo al recargar con busqueda)
+    document.addEventListener('DOMContentLoaded', () => {
+      // Si hay valores en selects o en la búsqueda, aplicamos el filtro
+      if ((inputBusquedaPrincipal && inputBusquedaPrincipal.value) ||
+          (document.getElementById('filtroEstadoCivil') && document.getElementById('filtroEstadoCivil').value) ||
+          (document.getElementById('filtroGenero') && document.getElementById('filtroGenero').value)) {
+        filtrarTabla();
+      }
+    });
+  </script>
 </body>
 </html>

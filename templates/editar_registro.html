@@ -4,6 +4,42 @@
   <meta charset="UTF-8" />
   <title>Editar Ciudadano</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='editar_registro.css') }}">
+  <style>
+    .error {
+      color: red;
+      font-size: 12px;
+      display: block;
+      margin-top: 5px;
+    }
+    
+    .input-error {
+      border: 2px solid red;
+    }
+    
+    .input-valid {
+      border: 2px solid green;
+    }
+    
+    .required::after {
+      content: " *";
+      color: red;
+    }
+
+    .btn-primaryC {
+      display: inline-block;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: white;
+      background-color: #6c757d;
+      border-radius: 4px;
+      text-align: center;
+      margin-left: 10px;
+    }
+
+    .btn-primaryC:hover {
+      background-color: #5a6268;
+    }
+  </style>
 </head>
 <body>
 
@@ -15,55 +51,321 @@
 
   <h2>Editar Ciudadano</h2>
 
-  <form action="{{ url_for('editar_registro', id=ciudadano.id) }}" method="POST" class="formulario">
+  <form action="{{ url_for('editar_registro', id=ciudadano.id) }}" method="POST" class="formulario" id="formulario" novalidate>
     <div class="columna">
-      <p9 for="campo2">Nombre:</p9>
-      <input type="text" id="campo2" name="campo2" value="{{ ciudadano.nombre }}">
+      <label for="campo2" class="required">Nombre:</label>
+      <input type="text" id="campo2" name="campo2" value="{{ ciudadano.nombre }}" required minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+">
+      <span class="error" id="error-campo2"></span>
 
-      <p8 for="campo3">Apellido Paterno:</p8>
-      <input type="text" id="campo3" name="campo3" value="{{ ciudadano.apellido_paterno }}">
+      <label for="campo3" class="required">Apellido Paterno:</label>
+      <input type="text" id="campo3" name="campo3" value="{{ ciudadano.apellido_paterno }}" required minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+">
+      <span class="error" id="error-campo3"></span>
 
-      <p4 for="campo4">Apellido Materno:</p4>
-      <input type="text" id="campo4" name="campo4" value="{{ ciudadano.apellido_materno }}">
+      <label for="campo4" class="required">Apellido Materno:</label>
+      <input type="text" id="campo4" name="campo4" value="{{ ciudadano.apellido_materno }}" required minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+">
+      <span class="error" id="error-campo4"></span>
 
-      <p5 for="campo5">Fecha de Nacimiento:</p5>
-      <input type="date" id="campo5" name="campo5" value="{{ ciudadano.fecha_nacimiento }}">
+      <label for="campo5" class="required">Fecha de Nacimiento:</label>
+      <input type="date" id="campo5" name="campo5" value="{{ ciudadano.fecha_nacimiento }}" required>
+      <span class="error" id="error-campo5"></span>
     </div>
 
     <div class="columna">
-      <p6 for="campo6">CURP:</p6>
-      <input type="text" id="campo6" name="campo6" value="{{ ciudadano.curp }}">
+      <label for="campo6" class="required">CURP:</label>
+      <input type="text" id="campo6" name="campo6" value="{{ ciudadano.curp }}" required maxlength="18" minlength="18" pattern="[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9A-Z][0-9]" style="text-transform: uppercase;">
+      <span class="error" id="error-campo6"></span>
 
-      <p7 for="campo7">RFC:</p7>
-      <input type="text" id="campo7" name="campo7" value="{{ ciudadano.rfc }}">
+      <label for="campo7" class="required">RFC:</label>
+      <input type="text" id="campo7" name="campo7" value="{{ ciudadano.rfc }}" required maxlength="13" minlength="12" pattern="[A-Z]{3,4}[0-9]{6}[A-Z0-9]{3}" style="text-transform: uppercase;">
+      <span class="error" id="error-campo7"></span>
 
-      <p10 for="campo10">Correo electrónico:</p10>
-      <input type="email" id="campo10" name="campo10" value="{{ ciudadano.correo }}">
+      <label for="campo10" class="required">Correo electrónico:</label>
+      <input type="email" id="campo10" name="campo10" value="{{ ciudadano.correo }}" required maxlength="100">
+      <span class="error" id="error-campo10"></span>
 
-      <p15 for="campo11">Domicilio:</p15>
-      <input type="text" id="campo11" name="campo11" value="{{ ciudadano.domicilio }}">
+      <label for="campo11" class="required">Domicilio:</label>
+      <input type="text" id="campo11" name="campo11" value="{{ ciudadano.domicilio }}" required minlength="5" maxlength="200">
+      <span class="error" id="error-campo11"></span>
 
-      <p12 for="campo12">Celular:</p12>
-      <input type="text" id="campo12" name="campo12" value="{{ ciudadano.celular }}">
+      <label for="campo12" class="required">Celular:</label>
+      <input type="tel" id="campo12" name="campo12" value="{{ ciudadano.celular }}" required pattern="[0-9]{10}" maxlength="10" placeholder="1234567890">
+      <span class="error" id="error-campo12"></span>
     </div>
 
     <div class="columna">
-      <p13 for="campo13">C.P.:</p13>
-      <select id="campo13" name="campo13">
+      <label for="campo13" class="required">C.P.:</label>
+      <select id="campo13" name="campo13" required>
+        <option value="">Seleccione...</option>
         <option value="90490" {% if ciudadano.cp == '90490' %}selected{% endif %}>90490</option>
         <option value="90460" {% if ciudadano.cp == '90460' %}selected{% endif %}>90460</option>
       </select>
+      <span class="error" id="error-campo13"></span>
 
-      <p14 for="campo14">Género:</p14>
-      <select id="campo14" name="campo14">
+      <label for="campo14" class="required">Género:</label>
+      <select id="campo14" name="campo14" required>
+        <option value="">Seleccione...</option>
         <option value="Masculino" {% if ciudadano.genero == 'Masculino' %}selected{% endif %}>Masculino</option>
         <option value="Femenino" {% if ciudadano.genero == 'Femenino' %}selected{% endif %}>Femenino</option>
       </select>
+      <span class="error" id="error-campo14"></span>
 
       <button type="submit" class="btn-primaryG">Guardar Cambios</button>
       <a href="{{ url_for('ver') }}" class="btn-primaryC">Cancelar</a>
     </div>
   </form>
+
+  <script>
+    // Objeto con mensajes de error personalizados
+    const mensajesError = {
+      campo2: {
+        valueMissing: "El nombre es obligatorio",
+        tooShort: "El nombre debe tener al menos 2 caracteres",
+        tooLong: "El nombre no puede tener más de 50 caracteres",
+        patternMismatch: "El nombre solo puede contener letras y espacios"
+      },
+      campo3: {
+        valueMissing: "El apellido paterno es obligatorio",
+        tooShort: "El apellido paterno debe tener al menos 2 caracteres",
+        tooLong: "El apellido paterno no puede tener más de 50 caracteres",
+        patternMismatch: "El apellido solo puede contener letras y espacios"
+      },
+      campo4: {
+        valueMissing: "El apellido materno es obligatorio",
+        tooShort: "El apellido materno debe tener al menos 2 caracteres",
+        tooLong: "El apellido materno no puede tener más de 50 caracteres",
+        patternMismatch: "El apellido solo puede contener letras y espacios"
+      },
+      campo5: {
+        valueMissing: "La fecha de nacimiento es obligatoria",
+        customError: "Debe ser mayor de 18 años"
+      },
+      campo6: {
+        valueMissing: "La CURP es obligatoria",
+        tooShort: "La CURP debe tener 18 caracteres",
+        tooLong: "La CURP debe tener 18 caracteres",
+        patternMismatch: "Formato de CURP inválido (ejemplo: ABCD123456HDFRRL09)"
+      },
+      campo7: {
+        valueMissing: "El RFC es obligatorio",
+        tooShort: "El RFC debe tener entre 12 y 13 caracteres",
+        tooLong: "El RFC debe tener entre 12 y 13 caracteres",
+        patternMismatch: "Formato de RFC inválido (ejemplo: ABC123456XYZ)"
+      },
+      campo10: {
+        valueMissing: "El correo electrónico es obligatorio",
+        typeMismatch: "Ingrese un correo electrónico válido",
+        tooLong: "El correo es demasiado largo"
+      },
+      campo11: {
+        valueMissing: "El domicilio es obligatorio",
+        tooShort: "El domicilio debe tener al menos 5 caracteres",
+        tooLong: "El domicilio no puede tener más de 200 caracteres"
+      },
+      campo12: {
+        valueMissing: "El número de celular es obligatorio",
+        patternMismatch: "El celular debe tener exactamente 10 dígitos"
+      },
+      campo13: {
+        valueMissing: "Debe seleccionar un código postal"
+      },
+      campo14: {
+        valueMissing: "Debe seleccionar un género"
+      }
+    };
+
+    // Función para validar edad mínima
+    function validarEdad(fecha) {
+      const hoy = new Date();
+      const fechaNacimiento = new Date(fecha);
+      const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+      const diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
+      
+      if (diferenciaMeses < 0 || (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
+        return edad - 1 >= 18;
+      }
+      return edad >= 18;
+    }
+
+    // Función para mostrar error
+    function mostrarError(campo, mensaje) {
+      const input = document.getElementById(campo);
+      const errorSpan = document.getElementById(`error-${campo}`);
+      
+      input.classList.add('input-error');
+      input.classList.remove('input-valid');
+      errorSpan.textContent = mensaje;
+    }
+
+    // Función para mostrar éxito
+    function mostrarExito(campo) {
+      const input = document.getElementById(campo);
+      const errorSpan = document.getElementById(`error-${campo}`);
+      
+      input.classList.add('input-valid');
+      input.classList.remove('input-error');
+      errorSpan.textContent = '';
+    }
+
+    // Función para validar un campo individual
+    function validarCampo(campo) {
+      const input = document.getElementById(campo);
+      const validity = input.validity;
+      const mensajes = mensajesError[campo];
+
+      // Validación especial para fecha de nacimiento
+      if (campo === 'campo5' && input.value) {
+        if (!validarEdad(input.value)) {
+          input.setCustomValidity("Debe ser mayor de 18 años");
+        } else {
+          input.setCustomValidity("");
+        }
+      }
+
+      if (validity.valid) {
+        mostrarExito(campo);
+        return true;
+      } else {
+        let mensaje = "Campo inválido";
+        
+        if (validity.valueMissing) mensaje = mensajes.valueMissing;
+        else if (validity.tooShort) mensaje = mensajes.tooShort;
+        else if (validity.tooLong) mensaje = mensajes.tooLong;
+        else if (validity.patternMismatch) mensaje = mensajes.patternMismatch;
+        else if (validity.typeMismatch) mensaje = mensajes.typeMismatch;
+        else if (validity.customError) mensaje = mensajes.customError;
+        
+        mostrarError(campo, mensaje);
+        return false;
+      }
+    }
+
+    // Función para detectar cambios en el formulario
+    let datosOriginales = {};
+    function guardarDatosOriginales() {
+      const campos = ['campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo10', 'campo11', 'campo12', 'campo13', 'campo14'];
+      campos.forEach(campo => {
+        const input = document.getElementById(campo);
+        datosOriginales[campo] = input.value;
+      });
+    }
+
+    function hayCambios() {
+      const campos = ['campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo10', 'campo11', 'campo12', 'campo13', 'campo14'];
+      return campos.some(campo => {
+        const input = document.getElementById(campo);
+        return input.value !== datosOriginales[campo];
+      });
+    }
+
+    // Agregar validación en tiempo real a todos los campos
+    const campos = ['campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo10', 'campo11', 'campo12', 'campo13', 'campo14'];
+    
+    // Guardar datos originales al cargar la página
+    window.addEventListener('load', () => {
+      guardarDatosOriginales();
+      
+      // Validar campos que ya tienen datos al cargar
+      campos.forEach(campo => {
+        const input = document.getElementById(campo);
+        if (input.value && input.value.trim() !== '') {
+          validarCampo(campo);
+        }
+      });
+    });
+    
+    campos.forEach(campo => {
+      const input = document.getElementById(campo);
+      
+      // Validar al perder el foco
+      input.addEventListener('blur', () => validarCampo(campo));
+      
+      // Validar mientras escribe (para algunos campos)
+      if (['campo2', 'campo3', 'campo4', 'campo10', 'campo11'].includes(campo)) {
+        input.addEventListener('input', () => {
+          if (input.value.length > 0) {
+            validarCampo(campo);
+          }
+        });
+      }
+    });
+
+    // Validación al enviar el formulario
+    document.getElementById('formulario').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let formularioValido = true;
+      
+      // Validar todos los campos
+      campos.forEach(campo => {
+        if (!validarCampo(campo)) {
+          formularioValido = false;
+        }
+      });
+      
+      if (formularioValido) {
+        // Verificar si hay cambios antes de enviar
+        if (!hayCambios()) {
+          if (confirm('No se han detectado cambios. ¿Desea continuar?')) {
+            this.submit();
+          }
+        } else {
+          // Confirmar antes de guardar cambios
+          if (confirm('¿Está seguro de que desea guardar los cambios?')) {
+            this.submit();
+          }
+        }
+      } else {
+        // Enfocar el primer campo con error
+        const primerError = document.querySelector('.input-error');
+        if (primerError) {
+          primerError.focus();
+          primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    });
+
+    // Advertir sobre cambios no guardados al intentar salir
+    window.addEventListener('beforeunload', function(e) {
+      if (hayCambios()) {
+        e.preventDefault();
+        e.returnValue = '¿Está seguro de que desea salir? Los cambios no guardados se perderán.';
+        return e.returnValue;
+      }
+    });
+
+    // Manejar el botón de cancelar con advertencia si hay cambios
+    document.querySelector('.btn-primaryC').addEventListener('click', function(e) {
+      if (hayCambios()) {
+        e.preventDefault();
+        if (confirm('¿Está seguro de que desea cancelar? Los cambios no guardados se perderán.')) {
+          window.location.href = this.href;
+        }
+      }
+    });
+
+    // Función para restaurar valores originales (opcional)
+    function restaurarDatos() {
+      campos.forEach(campo => {
+        const input = document.getElementById(campo);
+        const errorSpan = document.getElementById(`error-${campo}`);
+        
+        input.value = datosOriginales[campo];
+        input.classList.remove('input-error', 'input-valid');
+        errorSpan.textContent = '';
+      });
+    }
+
+    // Agregar botón de restaurar (opcional)
+    // Descomenta las siguientes líneas si quieres un botón para restaurar datos originales
+    /*
+    const restaurarBtn = document.createElement('button');
+    restaurarBtn.type = 'button';
+    restaurarBtn.textContent = 'Restaurar Datos Originales';
+    restaurarBtn.className = 'btn-secondary';
+    restaurarBtn.onclick = restaurarDatos;
+    document.querySelector('.columna:last-child').appendChild(restaurarBtn);
+    */
+  </script>
 
 </body>
 </html>

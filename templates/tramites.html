@@ -26,7 +26,7 @@
       <ul class="menu" id="menu">
         <li><a href="#">Ver Tramite</a></li>
         <li><a href="{{ url_for('registroTramite') }}">Registrar Tramite </a></li>
-        <li><a href="#">Solicitudes de Tramites</a></li>
+        <li><a href="{{ url_for('solicitudesTramite') }}">Solicitudes de Tramites</a></li>
       </ul>
 
       <nav class="menu-horizontal">
@@ -57,7 +57,6 @@
         <div class="filtro-checkboxes">
           <label><input type="checkbox" checked /> ID</label>
           <label><input type="checkbox" checked /> Nombre del Trámite</label>
-          <label><input type="checkbox" checked /> Dependencia</label>
           <label><input type="checkbox" checked /> Modalidad</label>
           <label><input type="checkbox" checked /> Tipo de Trámite</label>
           <label><input type="checkbox" checked /> Costo</label>
@@ -81,12 +80,13 @@
     </div>
   </form>
 
-  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 100%;">
+ 
+  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto;">
+
     <thead>
       <tr>
         <th>ID</th>
         <th>Nombre del Trámite</th>
-        <th>Dependencia</th>
         <th>Modalidad</th>
         <th>Tipo de Trámite</th>
         <th>Costo</th>
@@ -103,7 +103,6 @@
       <tr>
         <td>{{ tramite.id }}</td>
         <td>{{ tramite.nombre }}</td>
-        <td>{{ tramite.dependencia }}</td>
         <td>{{ tramite.modalidad }}</td>
         <td>{{ tramite.tipo_tramite }}</td>
         <td>{{ tramite.costo }}</td>
@@ -127,6 +126,7 @@
       {% endfor %}
     </tbody>
   </table>
+  
 
   <script src="{{ url_for('static', filename='apoyoburger.js') }}"></script>
 </body>
