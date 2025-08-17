@@ -1,0 +1,261 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ddd;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.cabecera {
+    font-family: dm serif-text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.contenedor {
+    background-color: #ddd;
+    height: 100px;
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.head{
+  display: grid;
+  grid-template-columns: 15% 1fr 15%;
+  gap: 20px;
+}
+
+.filtrado{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+    width: 140px;
+    height: 60px;
+    background-size: cover;
+    order: 0;
+    left: 50px;
+    margin-right: 50px;
+}
+
+h1 {
+    font-family: ´DM Serif Text´, serif;
+    background-size: cover;
+    font-size: 32px;
+    margin-top: 50px;
+    text-align: center;
+    color: #333;
+    order: 1;
+    flex-grow: 1;
+    padding-bottom: 60px;
+}
+
+h2 {
+    transform: translateX(70px);
+    font-family: ´DM Serif Text´, serif;
+    margin-top: 50px;
+}
+
+/* Menú horizontal de 4 opciones */
+.menu-horizontal {
+  margin-top: auto;
+  display: flex; /* necesario para que flexbox funcione */
+  width: 70%;
+  transform: translateX(150px);
+  height: 50%;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.menu-horizontal a {
+ text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.menu-horizontal a:hover {
+    background-color: #09365a;
+  color: white;
+}
+
+/* Panel de filtros (estilos que tú diste) */
+.filtro-panel {
+    position: absolute;
+    margin-top: 8px;
+    background: rgba(100, 140, 150, 0.7);
+    border-radius: 12px;
+    padding: 1rem 2rem 2rem 2rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: none;
+    max-width: 950px;
+    z-index: 20;
+}
+
+.filtro-panel label,
+.filtro-panel select {
+    margin-right: 1rem;
+}
+
+.filtro-campos {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 0.35rem 3rem;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.filtro-campos label {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+/* Botones */
+.btn-filtrado {
+    padding: 6px 10px;
+    background: #09365a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-buscar {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background: #0b6aa3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Buscador */
+.buscador input[type="text"] {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+
+table {
+   margin-top: 3rem;;
+  width: 100%;
+
+  border-collapse: collapse;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #5a0936;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+td {
+  height: 40px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3),
+td:nth-child(4),
+td:nth-child(5) {
+  font-weight: 500;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.edit {
+  color: teal;
+}
+
+.delete {
+  color: darkred;
+}
+
+.state {
+  font-weight: bold;
+}
+
+.activo {
+  color: green;
+}
+
+.proceso {
+  color: orange;
+}
+.vencido {
+    color: #eb0c0c;
+}
+
+.ver {
+    font-family: ´DM Serif Text´ ,serif;
+  text-align: center;
+  font-size: 18px;
+}
+
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination button {
+  margin: 0 4px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #dfecec;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination .active {
+  background-color: #09365a;
+  color: white;
+}
+.active:hover {
+  color: white;
+   background-color: #5a0936;
+}
+
+/* Consejo: contenedor relativo para que el panel absoluto se posicione respecto al botón */
+.filtro-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.filtro-titulo {
+  font-weight: bold;
+  margin-bottom: 5px;
+}

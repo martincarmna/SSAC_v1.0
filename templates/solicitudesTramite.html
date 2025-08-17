@@ -1,54 +1,154 @@
 <!-- templates/solicitudesApoyo.html -->
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Solicitudes de Apoyo</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='solicitudesTramite.css') }}">
-  <style>
-    .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
-    .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
-    table { width:80%; margin:auto; border-collapse: collapse; margin-top:20px; }
-    th, td { border:1px solid #ccc; padding:8px; text-align:center; }
-  </style>
-</head>
-<body>
-    <div class="contenedor">
-    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
-    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
-    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
-  </div>
-  <h1>Solicitudes de Apoyo</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre del Apoyo</th>
-        <th>Solicitante</th>
-        <th>Fecha Solicitud</th>
-        <th>Estado</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
-        <th>Ver Detalles</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for solicitud in solicitudes %}
-      <tr>
-        <td>{{ solicitud.id }}</td>
-        <td>{{ solicitud.nombre_apoyo }}</td>
-        <td>{{ solicitud.solicitante }}</td>
-        <td>{{ solicitud.fecha }}</td>
-        <td>{{ solicitud.estado }}</td>
-        
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="5">No hay solicitudes registradas.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitudes de Apoyo</title>
+
+    <link rel="stylesheet" href="/static/estilos.css" />
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="contenedor">
+            <div class="head">
+                <div>
+                    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
+                </div>
+                <div>
+                    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+                </div>
+                
+                <div>
+                    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+
+
+    </header>
+
+    <nav class="menu-horizontal">
+        <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
+        <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
+        <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
+        <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
+    </nav>
+
+    </header>
+
+    <h1>Solicitudes de Apoyo</h1>
+
+    <div class="container">
+        <div class="contenedor">
+            <div class="filtrado">
+                <h2 style="display:flex; align-items:center; gap:10px; margin: 0%;">
+                    Ver Ciudadanos
+                    <a href="/registro" title="Agregar ciudadano" style="text-decoration:none;">
+                        <img src="/static/agregarciu.png" alt="Agregar"
+                            style="width:24px; height:24px; vertical-align:middle;">
+                    </a>
+                </h2>
+
+                <div class="filtro-wrapper" style="margin-bottom:19px;">
+                    <button id="btnFiltrado" class="btn-filtrado" aria-haspopup="true" aria-expanded="false">
+                        🔍 Opciones de Filtrado
+                    </button>
+
+                    <!-- Panel: Estado Civil, Género, checkboxes de columnas y botón aplicar -->
+                    <div class="filtro-panel" id="panelFiltrado" role="region" aria-label="Panel de filtros">
+                        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+
+
+                            <label for="filtroGenero">Género:</label>
+                            <select id="filtroGenero" name="filtroGenero">
+                                <option value="">Todos</option>
+                                <option value="f">Femenino</option>
+                                <option value="m">Masculino</option>
+                            </select>
+
+
+                        </div>
+
+                        <hr style="margin:10px 0; border:none; border-top:1px solid rgba(238, 26, 26, 0.1)">
+
+                        <div class="filtro-campos" aria-label="Mostrar u ocultar columnas">
+                            <!-- Cada checkbox llama a toggleColumna(index) -->
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(0)"> ID</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(1)"> Nombre</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(2)"> Apellido P.</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(3)"> Apellido M.</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(4)"> CURP</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(5)"> Género</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(6)"> Fecha Nac.</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(7)"> Correo</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(8)"> Teléfono</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(9)"> RFC</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(10)"> Dirección</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(11)"> C.P.</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(12)"> Editar</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(13)"> Eliminar</label>
+                            <label><input type="checkbox" checked="" onchange="toggleColumna(14)"> Solicitudes</label>
+                        </div>
+
+                        <div style="margin-top:1rem; display:flex; gap:8px;">
+
+                            <button type="button" onclick="cerrarPanel()"
+                                style="background:#ccc; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buscador" style="margin-left: 8px; margin-bottom:12px;">
+                    <input type="text" name="busqueda" id="busquedaPrincipal"
+                        placeholder="         Buscar en Ciudadanos..." value="" autocomplete="off"
+                        style="padding:6px; border-radius:6px; border:1px solid #ccc;">
+                    <button type="button" class="btn-buscar" onclick="filtrarTabla()">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="contenedor">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Apoyo</th>
+                        <th>Solicitante</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Estado</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                        <th>Ver Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>{{ solicitud.id }}</td>
+                        <td>{{ solicitud.nombre_apoyo }}</td>
+                        <td>{{ solicitud.solicitante }}</td>
+                        <td>{{ solicitud.fecha }}</td>
+                        <td>{{ solicitud.estado }}</td>
+
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan=" 5">No hay solicitudes registradas.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 </body>
+
 </html>

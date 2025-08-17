@@ -309,7 +309,10 @@ def solicitudesTramite():
         {"id": 1, "nombre_apoyo": "Beca Educativa", "solicitante": "Juan Pérez", "fecha": "2025-08-14", "estado": "Pendiente"},
         {"id": 2, "nombre_apoyo": "Apoyo Alimentario", "solicitante": "Ana López", "fecha": "2025-08-13", "estado": "Aprobado"},
     ]
-    return render_template('solicitudesTramite.html', solicitudes=solicitudes)  
+    return render_template('solicitudesTramite.html', solicitudes=solicitudes)
+
+
+  
     
 
 # --- SERVICIOS ---
