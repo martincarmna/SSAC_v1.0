@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, session
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = "1234"
 
 db_config = {
     'user': 'root',
@@ -9,6 +10,9 @@ db_config = {
     'host': 'localhost',
     'database': 'prueba_flask'
 }
+
+def get_db_connection():
+    return mysql.connector.connect(**db_config)
 
 @app.route('/')
 def inicio():
@@ -147,14 +151,25 @@ def solicitar_ciudadano(id):
 # --- APOYOS ---
 @app.route('/apoyos')
 def apoyos():
+    busqueda = request.args.get('busqueda', '')  # Captura el texto del buscador
+
     try:
         with mysql.connector.connect(**db_config) as conn:
             with conn.cursor(dictionary=True) as cursor:
-                cursor.execute("SELECT * FROM apoyos")
+                query = "SELECT * FROM apoyos WHERE 1=1"
+                params = []
+
+                if busqueda:
+                    query += " AND nombre LIKE %s"  # Filtra por nombre del apoyo
+                    params.append(f"%{busqueda}%")
+
+                cursor.execute(query, params)
                 datos = cursor.fetchall()
-        return render_template('apoyos.html', apoyos=datos, request=request)
+
+        return render_template('apoyos.html', apoyos=datos, busqueda=busqueda, request=request)
     except Exception as e:
         return f"Error al obtener apoyos: {e}"
+
 
 @app.route('/registroApoyo')
 def registroApoyo():
@@ -200,8 +215,8 @@ def editar_apoyo(id):
     except Exception as e:
         return f"Error al editar apoyo: {e}"
 
-@app.route('/ver_apoyos/<int:id>')
-def ver_apoyos(id):
+@app.route('/ver_apoyo/<int:id>')
+def ver_apoyo(id):
     try:
         with mysql.connector.connect(**db_config) as conn:
             with conn.cursor(dictionary=True) as c:
@@ -211,35 +226,208 @@ def ver_apoyos(id):
     except Exception as e:
         return f"Error al mostrar detalles: {e}"
 
+@app.route('/eliminar_apoyo/<int:id>', methods=['POST'])
+def eliminar_apoyo(id):
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("DELETE FROM apoyos WHERE id = %s", (id,))
+            conn.commit()
+        return redirect('/apoyos')  # Redirige de nuevo a la lista de apoyos
+    except Exception as e:
+        return f"Error al eliminar apoyo: {e}"
+
 #@app.route('/solicitudes_apoyo')
 #def solicitarApoyo():
     #return render_template('solicitudes_apoyo.html')
 
 
 @app.route('/solicitudes_apoyo')
-def solicitudesApoyo():
-    # Aquí puedes traer los datos desde la DB o poner lista vacía
-    solicitudes = [
-        {"id": 1, "nombre_apoyo": "Beca Educativa", "solicitante": "Juan Pérez", "fecha": "2025-08-14", "estado": "Pendiente"},
-        {"id": 2, "nombre_apoyo": "Apoyo Alimentario", "solicitante": "Ana López", "fecha": "2025-08-13", "estado": "Aprobado"},
-    ]
-    return render_template('solicitudesApoyo.html', solicitudes=solicitudes)
+def solicitudes_apoyo():
+    busqueda = request.args.get('busqueda', '')  # Captura la búsqueda
 
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor(dictionary=True) as cursor:
+                query = """
+                    SELECT sa.id_sol_apoyo AS id,
+                           a.nombre AS nombre_apoyo,
+                           c.nombre AS solicitante,
+                           sa.fecha_solicitud AS fecha,
+                           sa.estado
+                    FROM solicitud_apoyo sa
+                    JOIN apoyos a ON sa.apoyos_id = a.id
+                    JOIN ciudadanos c ON sa.ciudadanos_id = c.id
+                    WHERE 1=1
+                """
+                params = []
+
+                if busqueda:
+                    query += " AND (a.nombre LIKE %s OR c.nombre LIKE %s OR sa.estado LIKE %s)"
+                    params.extend([f"%{busqueda}%", f"%{busqueda}%", f"%{busqueda}%"])
+
+                cursor.execute(query, params)
+                solicitudes = cursor.fetchall()
+
+        return render_template('solicitudesApoyo.html', solicitudes=solicitudes, busqueda=busqueda, request=request)
+    except Exception as e:
+        return f"Error al obtener solicitudes de apoyo: {e}"
+
+# Ruta para mostrar el formulario de solicitud de apoyo
+@app.route('/registro_solicitud_apoyo', methods=['GET', 'POST'])
+def registro_solicitud_apoyo():
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor(dictionary=True) as cursor:
+
+                # Traemos los apoyos disponibles
+                cursor.execute("SELECT id, nombre FROM apoyos WHERE estado='Activo'")
+                apoyos = cursor.fetchall()
+
+                # Traemos los ciudadanos
+                cursor.execute("SELECT id, nombre, apellido_paterno FROM ciudadanos")
+                ciudadanos = cursor.fetchall()
+
+        return render_template(
+            'solicitud_apoyo_form.html',
+            apoyos=apoyos,
+            ciudadanos=ciudadanos,
+            request=request
+        )
+    except Exception as e:
+        return f"Error al cargar el formulario: {e}"
+
+
+# Ruta para guardar la solicitud en la base de datos
+@app.route('/guardar_solicitud_apoyo', methods=['POST'])
+def guardar_solicitud_apoyo():
+    d = request.form
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO solicitud_apoyo 
+                    (apoyos_id, ciudadanos_id, nombre, descripcion, fecha_solicitud, costo, estado, tipo_tramite, formato_pago)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """, (
+                    d.get('apoyos_id'),
+                    d.get('ciudadanos_id'),
+                    d.get('nombre'),
+                    d.get('descripcion'),
+                    d.get('fecha_solicitud'),
+                    d.get('costo'),
+                    d.get('estado'),
+                    d.get('tipo_tramite'),
+                    d.get('formato_pago')
+                ))
+            conn.commit()  # Confirmamos la inserción
+        return redirect(url_for('solicitudes_apoyo'))
+ # Redirige a la lista de solicitudes
+    except Exception as e:
+        return f"Error al guardar la solicitud: {e}"
+
+# Ruta para eliminar solicitud de apoyo
+@app.route('/eliminar_solicitud_apoyo/<int:id>', methods=['POST'])
+def eliminar_solicitud_apoyo(id):
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("DELETE FROM solicitud_apoyo WHERE id_sol_apoyo = %s", (id,))
+                conn.commit()
+        return redirect(url_for('solicitudes_apoyo'))  # Redirige a la lista de solicitudes
+    except Exception as e:
+        return f"Error al eliminar la solicitud: {e}"
+
+@app.route('/editar_solicitud_apoyo/<int:id>', methods=['GET', 'POST'])
+def editar_solicitud_apoyo(id):
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            if request.method == 'POST':
+                d = request.form
+                with conn.cursor() as cursor:
+                    cursor.execute("""
+                        UPDATE solicitud_apoyo 
+                        SET apoyos_id=%s, ciudadanos_id=%s, nombre=%s, descripcion=%s,
+                            fecha_solicitud=%s, costo=%s, estado=%s, tipo_tramite=%s, formato_pago=%s
+                        WHERE id_sol_apoyo=%s
+                    """, (
+                        d.get('apoyos_id'), d.get('ciudadanos_id'), d.get('nombre'),
+                        d.get('descripcion'), d.get('fecha_solicitud'), d.get('costo'),
+                        d.get('estado'), d.get('tipo_tramite'), d.get('formato_pago'), id
+                    ))
+                conn.commit()
+                return redirect(url_for('solicitudes_apoyo'))
+            else:
+                with conn.cursor(dictionary=True) as cursor:
+                    cursor.execute("SELECT * FROM solicitud_apoyo WHERE id_sol_apoyo=%s", (id,))
+                    solicitud = cursor.fetchone()
+                return render_template('editar_solicitud_apoyo.html', solicitud=solicitud, request=request)
+    except Exception as e:
+        return f"Error al editar la solicitud: {e}"
+    
+@app.route('/ver_solicitud_apoyo/<int:id>')
+def ver_solicitud_apoyo(id):
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor(dictionary=True) as cursor:
+                cursor.execute("""
+                    SELECT sa.id_sol_apoyo AS id,
+                           a.nombre AS nombre_apoyo,
+                           c.nombre AS solicitante,
+                           sa.fecha_solicitud AS fecha,
+                           sa.estado,
+                           sa.descripcion,
+                           sa.costo,
+                           sa.tipo_tramite,
+                           sa.formato_pago
+                    FROM solicitud_apoyo sa
+                    JOIN apoyos a ON sa.apoyos_id = a.id
+                    JOIN ciudadanos c ON sa.ciudadanos_id = c.id
+                    WHERE sa.id_sol_apoyo = %s
+                """, (id,))
+                solicitud = cursor.fetchone()
+
+        if solicitud:
+            return render_template('ver_solicitud_apoyo.html', solicitud=solicitud)
+        else:
+            return "Solicitud de apoyo no encontrada", 404
+    except Exception as e:
+        return f"Error al obtener la solicitud: {e}"
 
 
 
 
 # --- TRÁMITES ---
+# --- TRÁMITES CON BÚSQUEDA ---
 @app.route('/tramites')
 def tramites():
+    busqueda = request.args.get('busqueda', '')  # Captura el texto del buscador
+    estado = request.args.get('estado', '')      # Si quieres filtrar por estado también
+
     try:
         with mysql.connector.connect(**db_config) as conn:
             with conn.cursor(dictionary=True) as cursor:
-                cursor.execute("SELECT * FROM tramites")
+                # Consulta básica
+                query = "SELECT * FROM tramites WHERE 1=1"
+                params = []
+
+                # Filtrado por búsqueda
+                if busqueda:
+                    query += " AND nombre LIKE %s"
+                    params.append(f"%{busqueda}%")
+
+                # Filtrado por estado
+                if estado:
+                    query += " AND estado = %s"
+                    params.append(estado)
+
+                cursor.execute(query, params)
                 tramites = cursor.fetchall()
-        return render_template('tramites.html', tramites=tramites, request=request)
+
+        return render_template('tramites.html', tramites=tramites, busqueda=busqueda, estado=estado, request=request)
     except Exception as e:
         return f"Error al obtener trámites: {e}"
+
 
 @app.route('/registroTramite')
 def registroTramite():
@@ -302,33 +490,46 @@ def eliminar_tramite(id):
     except Exception as e:
         return f"Error al eliminar trámite: {e}"
     
-@app.route('/solicitudesTramite')
-def solicitudesTramite():
-    # Aquí puedes traer los datos desde la DB o poner lista vacía
-    solicitudes = [
-        {"id": 1, "nombre_apoyo": "Beca Educativa", "solicitante": "Juan Pérez", "fecha": "2025-08-14", "estado": "Pendiente"},
-        {"id": 2, "nombre_apoyo": "Apoyo Alimentario", "solicitante": "Ana López", "fecha": "2025-08-13", "estado": "Aprobado"},
-    ]
-    return render_template('solicitudesTramite.html', solicitudes=solicitudes)
-
-
-  
-    
-
-# --- SERVICIOS ---
-@app.route('/servicios')
-def servicios():
+@app.route('/ver_tramite/<int:id>')
+def ver_tramite(id):
     try:
         with mysql.connector.connect(**db_config) as conn:
             with conn.cursor(dictionary=True) as cursor:
-                cursor.execute("SELECT * FROM servicios")
+                cursor.execute("SELECT * FROM tramites WHERE id=%s", (id,))
+                tramite = cursor.fetchone()  # Un solo trámite
+        return render_template('ver_tramite.html', tramite=tramite)  # Aquí la variable debe llamarse 'tramite'
+    except Exception as e:
+        return f"Error al mostrar detalles: {e}"
+
+
+
+    
+# --- SERVICIOS ---
+@app.route('/servicios')
+def servicios():
+    busqueda = request.args.get('busqueda', '')  # Captura lo que escriba el usuario
+
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor(dictionary=True) as cursor:
+                query = "SELECT * FROM servicios WHERE 1=1"
+                params = []
+
+                # Filtrado por búsqueda en nombre o tipo de servicio
+                if busqueda:
+                    query += " AND (nombre LIKE %s OR tipo_servicio LIKE %s)"
+                    params.extend([f"%{busqueda}%", f"%{busqueda}%"])
+
+                cursor.execute(query, params)
                 servicios = cursor.fetchall()
-        return render_template('servicios.html', servicios=servicios, request=request)
+
+        return render_template('servicios.html', servicios=servicios, busqueda=busqueda, request=request)
     except Exception as e:
         return f"Error al obtener servicios: {e}"
 
-@app.route('/nuevo_servicio')
-def nuevo_registro():
+
+@app.route('/registro_servicio')
+def registro_servicio():
     return render_template('nuevo_servicio.html', request=request)
 
 @app.route('/guardar_servicio', methods=['POST'])
@@ -388,6 +589,24 @@ def eliminar_servicio(id):
         return redirect('/servicios')
     except Exception as e:
         return f"Error al eliminar servicio: {e}"
+    
+@app.route('/ver_servicio/<int:id>')
+def ver_servicio(id):
+    try:
+        with mysql.connector.connect(**db_config) as conn:
+            with conn.cursor(dictionary=True) as cursor:
+                cursor.execute("SELECT * FROM servicios WHERE id=%s", (id,))
+                servicio = cursor.fetchone()  # Un solo servicio
+        return render_template('ver_servicios.html', serv=servicio)  # Enviamos la variable correcta
+    except Exception as e:
+        return f"Error al mostrar detalles: {e}"
+
+
+
+@app.route('/solicitudes-servicio')
+def solicitudes_servicio():
+    return render_template("solicitudServicio.html")
+
 
 
 

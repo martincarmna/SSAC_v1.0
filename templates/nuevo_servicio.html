@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solicitar Servicio - SAC</title>
+  <title>Nuevo Servicio - SSAC</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='nuevo_servicio.css') }}" />
 </head>
 <body>
@@ -18,43 +19,75 @@
   </nav>
 
   <div class="container">
-    <h2>Solicitar Servicio para: {{ ciudadano.nombre }} {{ ciudadano.apellido_paterno }}</h2>
+    <h2>Nuevo Servicio</h2>
 
-    <form method="POST" action="{{ url_for('guardar_solicitud_servicio', ciudadano_id=ciudadano.id) }}">
+   <form method="POST" action="{{ url_for('guardar_servicio') }}">
 
-      <div class="form-group" style="display: none;">
-        <label>ID del Ciudadano</label>
-        <input type="text" name="ciudadano_id" value="{{ ciudadano.id }}" readonly />
+
+      <div class="image-placeholder">
+        <img src="https://via.placeholder.com/100?text=+" alt="Imagen de servicio" />
       </div>
 
       <div class="form-group">
-        <label>Servicio a solicitar</label>
-        <select name="servicio_id" required>
-          <option value="">Seleccione un servicio...</option>
-          {% for servicio in servicios_disponibles %}
-          <option value="{{ servicio.id }}">{{ servicio.nombre_servicio }} - Costo: ${{ servicio.costo }}</option>
-          {% endfor %}
-        </select>
+        <label>ID</label>
+        <input type="text" placeholder="ID automático" disabled />
       </div>
+
+      <div class="form-group">
+        <label>Nombre del servicio</label>
+        <input type="text" name="nombre" required />
+      </div>
+
     
+
       <div class="form-group">
-        <label>Estado de la Solicitud</label>
-        <select name="estado_solicitud" required>
-          <option value="Pendiente">Pendiente</option>
-          <option value="En Proceso">En Proceso</option>
-          <option value="Completado">Completado</option>
-          <option value="Rechazado">Rechazado</option>
+       <select name="tipo_servicio" required>
+          <option value="">Seleccione...</option>
+          <option value="Agua Potable">Agua Potable</option>
+          <option value="Alumbrado Público">Alumbrado Público</option>
         </select>
       </div>
-
       <div class="form-group">
-        <label>Comentarios adicionales</label>
-        <textarea name="comentarios" rows="4"></textarea>
+        <label>Costo</label>
+        <div class="cost-input">
+          <button type="button" onclick="decrease()">−</button>
+          <input type="number" name="costo" id="cost" value="10" min="0" />
+          <button type="button" onclick="increase()">+</button>
+        </div>
       </div>
 
-      <button type="submit" class="submit-btn">Guardar Solicitud</button>
+
+       <div class="form-group">
+          <label>Estado</label>
+          <select name="estado">
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pdf-links">
+        <a href="#"><img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" />Hoja de solicitud del servicio</a>
+        <a href="#"><img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" />Documentación y especificaciones</a>
+      </div>
+
+      <button type="submit" class="submit-btn">Guardar</button>
     </form>
   </div>
+
+  <script>
+    function increase() {
+      const input = document.getElementById('cost');
+      input.value = parseInt(input.value) + 1;
+    }
+
+    function decrease() {
+      const input = document.getElementById('cost');
+      if (parseInt(input.value) > 0) {
+        input.value = parseInt(input.value) - 1;
+      }
+    }
+  </script>
 
 </body>
 </html>

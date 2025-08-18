@@ -8,7 +8,7 @@
     .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
     .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
 
-    /* Panel de filtros (estilos que tú diste) */
+    /* Panel de filtros */
     .filtro-panel {
       position: absolute;
       margin-top: 8px;
@@ -20,9 +20,7 @@
       max-width: 950px;
       z-index: 20;
     }
-    .filtro-panel label, .filtro-panel select {
-      margin-right: 1rem;
-    }
+    .filtro-panel label, .filtro-panel select { margin-right: 1rem; }
     .filtro-campos {
       display: grid;
       grid-template-columns: repeat(2, max-content);
@@ -66,7 +64,7 @@
     table { border-collapse: collapse; }
     table th, table td { padding: 6px 8px; border: 1px solid #ddd; }
 
-    /* Consejo: contenedor relativo para que el panel absoluto se posicione respecto al botón */
+    /* Contenedor relativo para panel */
     .filtro-wrapper { position: relative; display: inline-block; }
   </style>
 </head>
@@ -91,31 +89,24 @@
     </a>
   </h2>
 
-  <!-- Botón que muestra el panel de filtros (envolvemos en filtro-wrapper para posicionamiento) -->
   <div class="filtro-wrapper" style="margin-bottom:19px;">
     <button id="btnFiltrado" class="btn-filtrado" aria-haspopup="true" aria-expanded="false">
       &#128269; Opciones de Filtrado
     </button>
 
-    <!-- Panel: Estado Civil, Género, checkboxes de columnas y botón aplicar -->
     <div class="filtro-panel" id="panelFiltrado" role="region" aria-label="Panel de filtros">
       <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
-        
-
         <label for="filtroGenero">Género:</label>
         <select id="filtroGenero" name="filtroGenero">
           <option value="">Todos</option>
           <option value="f">Femenino</option>
           <option value="m">Masculino</option>
         </select>
-
-        
       </div>
 
       <hr style="margin:10px 0; border:none; border-top:1px solid rgba(238, 26, 26, 0.1)">
 
       <div class="filtro-campos" aria-label="Mostrar u ocultar columnas">
-        <!-- Cada checkbox llama a toggleColumna(index) -->
         <label><input type="checkbox" checked onchange="toggleColumna(0)"> ID</label>
         <label><input type="checkbox" checked onchange="toggleColumna(1)"> Nombre</label>
         <label><input type="checkbox" checked onchange="toggleColumna(2)"> Apellido P.</label>
@@ -134,13 +125,11 @@
       </div>
 
       <div style="margin-top:1rem; display:flex; gap:8px;">
-
         <button type="button" onclick="cerrarPanel()" style="background:#ccc; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- Buscador principal (fuera del panel) -->
   <div class="buscador" style="margin-left: 8px; margin-bottom:12px;">
     <input
       type="text"
@@ -154,7 +143,6 @@
     <button type="button" class="btn-buscar" onclick="filtrarTabla()">Buscar</button>
   </div>
 
-  <!-- Tabla (igual que tu plantilla) -->
   <table id="tablaCiudadanos" border="1" cellspacing="0" cellpadding="5" style="margin-top: 6px; width: 95%; margin-left: auto; margin-right: auto;">
     <thead>
       <tr>
@@ -190,7 +178,8 @@
         <td>{{ c.rfc }}</td>
         <td>{{ c.domicilio }}</td>
         <td>{{ c.cp }}</td>
-        <td><a href="{{ url_for('editar_registro', id=c.id) }}" title="Editar">👁️</a></td>
+        <!-- Icono de editar cambiado a lápiz -->
+        <td><a href="{{ url_for('editar_registro', id=c.id) }}" title="Editar">✏️</a></td>
         <td>
           <form method="post" action="{{ url_for('eliminar_ciudadano', id=c.id) }}" style="display:inline;">
             <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este ciudadano?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
@@ -216,14 +205,12 @@
   </table>
 
   <script>
-    // Referencias
     const btnFiltrado = document.getElementById('btnFiltrado');
     const panelFiltrado = document.getElementById('panelFiltrado');
     const aplicarBtn = document.getElementById('aplicarFiltrosBtn');
     const inputBusquedaPrincipal = document.getElementById('busquedaPrincipal');
     const inputBusquedaPanel = document.getElementById('filtroTextoPanel');
 
-    // Mostrar/ocultar panel
     btnFiltrado.addEventListener('click', () => {
       const visible = panelFiltrado.style.display === 'block';
       panelFiltrado.style.display = visible ? 'none' : 'block';
@@ -235,7 +222,6 @@
       btnFiltrado.setAttribute('aria-expanded', 'false');
     }
 
-    // Cerrar panel al hacer clic fuera
     document.addEventListener('click', (e) => {
       if (!panelFiltrado.contains(e.target) && !btnFiltrado.contains(e.target)) {
         panelFiltrado.style.display = 'none';
@@ -243,38 +229,26 @@
       }
     });
 
-    // Aplicar filtros desde el panel
     aplicarBtn.addEventListener('click', filtrarTabla);
-
-    // Filtrar en tiempo real desde buscador principal (opcional)
     inputBusquedaPrincipal.addEventListener('input', filtrarTabla);
     inputBusquedaPanel.addEventListener('input', filtrarTabla);
 
-    // Función para ocultar/mostrar columnas por índice (0-based)
     function toggleColumna(numColumna) {
       const tabla = document.querySelector('#tablaCiudadanos');
       if (!tabla) return;
-      // Recorremos todas las filas (thead + tbody)
       for (let r = 0; r < tabla.rows.length; r++) {
         const cell = tabla.rows[r].cells[numColumna];
-        if (cell) {
-          // alternar display
-          cell.style.display = (cell.style.display === 'none') ? '' : 'none';
-        }
+        if (cell) cell.style.display = (cell.style.display === 'none') ? '' : 'none';
       }
     }
 
-    // Función principal de filtrado
     function filtrarTabla() {
       const estadoCivil = (document.getElementById('filtroEstadoCivil')?.value || '').toLowerCase();
       const genero = (document.getElementById('filtroGenero')?.value || '').toLowerCase();
       const textoBusqueda = (document.getElementById('busquedaPrincipal')?.value || '').toLowerCase();
       const textoPanel = (document.getElementById('filtroTextoPanel')?.value || '').toLowerCase();
-
       const tabla = document.getElementById('tablaCiudadanos');
       const tbody = tabla.querySelector('tbody');
-
-      // Eliminar fila de "no-results" auto-creada si existe (para re-evaluar)
       const existingNoResults = tbody.querySelector('tr.no-results-auto');
       if (existingNoResults) existingNoResults.remove();
 
@@ -282,35 +256,22 @@
       let visibles = 0;
 
       filas.forEach(fila => {
-        // Si es la fila de template "No se encontraron..." (colspan único), la ignoramos para la evaluación
         const celdas = fila.querySelectorAll('td');
         if (celdas.length === 1 && fila.classList.contains('no-data')) {
-          fila.style.display = 'none'; // la controlamos manualmente con lógica
+          fila.style.display = 'none';
           return;
         }
-
-        // Accedemos a celdas por índice según tu tabla:
-        // 0: ID, 1: Nombre, 2: Apellido P, 3: Apellido M, 4: CURP, 5: Género, ...
         const generoCelda = celdas[5] ? celdas[5].textContent.trim().toLowerCase() : '';
         const filaTexto = fila.textContent.trim().toLowerCase();
-
-        // Estado civil: tu tabla actual no contiene explícitamente columna "estado civil".
-        // Por eso filtramos por estadoCivil buscando en todo el texto de la fila.
-        // Si agregas la columna estado_civil en el futuro, cambia esto por celdas[idxEstado].textContent...
         const coincideEstado = !estadoCivil || filaTexto.includes(estadoCivil);
         const coincideGenero = !genero || generoCelda === genero;
         const coincideBusquedaGlobal = !textoBusqueda || filaTexto.includes(textoBusqueda);
         const coincideBusquedaPanel = !textoPanel || filaTexto.includes(textoPanel);
 
-        if (coincideEstado && coincideGenero && coincideBusquedaGlobal && coincideBusquedaPanel) {
-          fila.style.display = '';
-          visibles++;
-        } else {
-          fila.style.display = 'none';
-        }
+        fila.style.display = (coincideEstado && coincideGenero && coincideBusquedaGlobal && coincideBusquedaPanel) ? '' : 'none';
+        if (fila.style.display === '') visibles++;
       });
 
-      // Si no hay filas visibles, mostramos una fila de "no se encontraron resultados" dinámica
       if (visibles === 0) {
         const trNo = document.createElement('tr');
         trNo.classList.add('no-results-auto');
@@ -323,9 +284,7 @@
       }
     }
 
-    // Ejecutar filtrado inicial por si hay un valor en el input (por ejemplo al recargar con busqueda)
     document.addEventListener('DOMContentLoaded', () => {
-      // Si hay valores en selects o en la búsqueda, aplicamos el filtro
       if ((inputBusquedaPrincipal && inputBusquedaPrincipal.value) ||
           (document.getElementById('filtroEstadoCivil') && document.getElementById('filtroEstadoCivil').value) ||
           (document.getElementById('filtroGenero') && document.getElementById('filtroGenero').value)) {

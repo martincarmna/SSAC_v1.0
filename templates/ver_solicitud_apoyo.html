@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Solicitud de Apoyo</title>
+  <style>
+    body { font-family: Arial; background:#f8f8f8; padding:20px; }
+    .contenedor { max-width:800px; margin:auto; background:#fff; padding:30px; border-radius:8px; }
+    h1,h2 { text-align:center; color:#09365a; }
+    .detalle { display:grid; grid-template-columns:1fr 1fr; gap:15px 30px; margin-top:20px; }
+    .item label { font-weight:bold; color:#09365a; }
+    .item div { padding:8px 10px; background:#f1f1f1; border-radius:4px; word-wrap:break-word; }
+    .volver { text-align:center; margin-top:30px; }
+    .volver a { background:#09365a; color:white; padding:10px 20px; border-radius:4px; text-decoration:none; }
+    .volver a:hover { background:#0b4776; }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1>Sistema de Solicitud y Atención Ciudadana</h1>
+    <h2>Detalles de la Solicitud de Apoyo</h2>
+
+    {% if solicitud %}
+    <div class="detalle">
+      <div class="item"><label>ID:</label><div>{{ solicitud.id }}</div></div>
+      <div class="item"><label>Apoyo:</label><div>{{ solicitud.nombre_apoyo }}</div></div>
+      <div class="item"><label>Solicitante:</label><div>{{ solicitud.nombre_ciudadano }}</div></div>
+      <div class="item"><label>Fecha de Solicitud:</label><div>{{ solicitud.fecha_solicitud }}</div></div>
+      <div class="item"><label>Estado:</label><div>{{ solicitud.estado }}</div></div>
+      <div class="item"><label>Costo:</label><div>{{ solicitud.costo }}</div></div>
+      <div class="item"><label>Tipo de Trámite:</label><div>{{ solicitud.tipo_tramite }}</div></div>
+      <div class="item"><label>Formato de Pago:</label><div>{{ solicitud.formato_pago }}</div></div>
+      <div class="item"><label>Descripción:</label><div>{{ solicitud.descripcion }}</div></div>
+    </div>
+    {% else %}
+    <p style="text-align:center;">No se encontró la solicitud de apoyo.</p>
+    {% endif %}
+
+    <div class="volver">
+      <a href="{{ url_for('solicitudes_apoyo') }}">← Volver a Solicitudes de Apoyo</a>
+    </div>
+  </div>
+</body>
+</html>

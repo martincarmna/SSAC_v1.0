@@ -1,50 +1,68 @@
-<!-- templates/solicitudesApoyo.html -->
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <title>Solicitudes de Apoyo</title>
-  <!--link rel="stylesheet" href="{{ url_for('static', filename='solicitudesApoyo.css') }}"-->
-  <link rel="stylesheet" href="/static/solicitudesApoyo.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='apoyos.css') }}">
   <style>
-    .menu-horizontal a {
-      padding: 8px 12px;
-      text-decoration: none;
-      color: #333;
-    }
-
-    .menu-horizontal a.activo {
-      background: #09365a;
-      color: #fff;
-      border-radius: 4px;
-    }
-
-    table {
-      width: 80%;
-      margin: auto;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th,
-    td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-    }
+    .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
+    .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
+    .filtro-dropdown { display:none; margin-bottom:20px; background:#fff; border:1px solid #ccc; padding:10px; 
+      box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1000; }
+    .filtro-checkboxes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
   </style>
 </head>
-
 <body>
   <div class="contenedor">
     <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
-    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
-    <img src="/static/logo1.png" alt="logo del Sistema" class="logo" />
+    <a href="http://127.0.0.1:5000/">Cerrar sesión</a>
+    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
   </div>
-  <h1>Solicitudes de Apoyo</h1>
 
-  <table>
+  <header>
+    <div class="top-bar">
+      <div class="menu-hamburguesa" id="btn-menu">
+        <span></span><span></span><span></span>
+      </div>
+
+      <ul class="menu" id="menu">
+        <li><a href="#">Ver Solicitudes de Apoyo</a></li>
+        <li><a href="{{ url_for('registro_solicitud_apoyo') }}">Registrar Solicitud de Apoyo</a></li>
+      </ul>
+
+      <nav class="menu-horizontal">
+        <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
+        <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
+        <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
+        <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
+      </nav>
+    </div>
+  </header>
+
+  <h2>Solicitudes de Apoyo</h2>
+
+  <form method="GET" action="/solicitudes_apoyo" id="formFiltros">
+    <div class="contenedor-filtros-busqueda">
+      <button type="button" class="btn-filtro" id="btnFiltro">Opciones de Filtrado</button>
+
+      <div class="filtro-dropdown" id="filtroDropdown" style="display:none; margin-top:10px;">
+        <!-- Aquí puedes agregar filtros si los necesitas -->
+      </div>
+
+      <div class="buscador" style="margin-left: 20px;">
+        <input
+          type="text"
+          name="busqueda"
+          placeholder="Buscar por Apoyo, Solicitante o Estado..."
+          value="{{ busqueda }}"
+          autocomplete="off"
+        />
+        <button type="submit">Buscar</button>
+      </div>
+    </div>
+  </form>
+
+  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 90%; margin-left: auto; margin-right: auto; text-align: center;">
     <thead>
       <tr>
         <th>ID</th>
@@ -54,7 +72,7 @@
         <th>Estado</th>
         <th>Editar</th>
         <th>Eliminar</th>
-        <th>Ver Detalles</th>
+        <th>Ver</th>
       </tr>
     </thead>
     <tbody>
@@ -65,15 +83,30 @@
         <td>{{ solicitud.solicitante }}</td>
         <td>{{ solicitud.fecha }}</td>
         <td>{{ solicitud.estado }}</td>
-
+        <td>
+          <a href="/editar_solicitud_apoyo/{{ solicitud.id }}" title="Editar" style="font-size:18px;">✏️</a>
+      </td>
+      {% if solicitud.estado == 'Pendiente' %}
+        <td>
+          <form method="post" action="{{ url_for('eliminar_solicitud_apoyo', id=solicitud.id) }}" style="display:inline;">
+            <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar esta solicitud?')" style="background:none; border:none; cursor:pointer; font-size:18px;">🗑️</button>
+          </form>
+        </td>
+      {% else %}
+        <td>N/A</td>
+      {% endif %}
+        <td>
+          <a href="/ver_solicitud_apoyo/{{ solicitud.id }}" title="Ver" style="font-size:18px;">👁️</a>
+        </td>
       </tr>
       {% else %}
       <tr>
-        <td colspan="5">No hay solicitudes registradas.</td>
+        <td colspan="5" style="text-align:center;">No se encontraron solicitudes.</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-</body>
 
+  <script src="{{ url_for('static', filename='apoyoburger.js') }}"></script>
+</body>
 </html>

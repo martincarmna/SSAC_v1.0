@@ -1,0 +1,105 @@
+<!-- templates/editar_solicitud_apoyo.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Solicitud de Apoyo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='apoyos.css') }}">
+  <style>
+    .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
+    .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
+    form { width: 60%; margin: 20px auto; background:#f9f9f9; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    label { display:block; margin-top:10px; font-weight:bold; }
+    input, select, textarea { width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; }
+    button { margin-top:15px; padding:10px 20px; background:#09365a; color:#fff; border:none; border-radius:4px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+    <a href="http://127.0.0.1:5000/">Cerrar sesión</a>
+    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
+  </div>
+
+  <header>
+    <div class="top-bar">
+      <div class="menu-hamburguesa" id="btn-menu">
+        <span></span><span></span><span></span>
+      </div>
+
+      <ul class="menu" id="menu">
+        <li><a href="{{ url_for('registro_solicitud_apoyo') }}">Registrar Solicitud</a></li>
+        <li><a href="{{ url_for('solicitudes_apoyo') }}">Ver Solicitudes</a></li>
+      </ul>
+
+      <nav class="menu-horizontal">
+        <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
+        <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
+        <a href="/apoyos" class="{% if request.path == '/apoyos' %}activo{% endif %}">Apoyos</a>
+        <a href="/tramites" class="{% if request.path == '/tramites' %}activo{% endif %}">Trámites</a>
+      </nav>
+    </div>
+  </header>
+
+  <h2>Editar Solicitud de Apoyo</h2>
+
+  <form method="POST">
+    <!-- Apoyo -->
+    <label for="apoyos_id">Seleccionar Apoyo</label>
+    <select name="apoyos_id" required>
+      <option value="">-- Selecciona un apoyo --</option>
+      {% for apoyo in apoyos %}
+      <option value="{{ apoyo.id }}" {% if apoyo.id == solicitud.apoyos_id %}selected{% endif %}>
+        {{ apoyo.nombre }}
+      </option>
+      {% endfor %}
+    </select>
+
+    <!-- Ciudadano -->
+    <label for="ciudadanos_id">Seleccionar Solicitante</label>
+    <select name="ciudadanos_id" required>
+      <option value="">-- Selecciona un ciudadano --</option>
+      {% for c in ciudadanos %}
+      <option value="{{ c.id }}" {% if c.id == solicitud.ciudadanos_id %}selected{% endif %}>
+        {{ c.nombre }} {{ c.apellido_paterno }}
+      </option>
+      {% endfor %}
+    </select>
+
+    <!-- Nombre de la solicitud -->
+    <label for="nombre">Nombre de la Solicitud</label>
+    <input type="text" name="nombre" value="{{ solicitud.nombre }}" required />
+
+    <!-- Descripción -->
+    <label for="descripcion">Descripción</label>
+    <textarea name="descripcion" rows="3">{{ solicitud.descripcion }}</textarea>
+
+    <!-- Fecha de solicitud -->
+    <label for="fecha_solicitud">Fecha de Solicitud</label>
+    <input type="date" name="fecha_solicitud" value="{{ solicitud.fecha_solicitud|safe }}" required />
+
+    <!-- Costo -->
+    <label for="costo">Costo</label>
+    <input type="number" step="0.01" name="costo" value="{{ solicitud.costo }}" required />
+
+    <!-- Estado -->
+    <label for="estado">Estado</label>
+    <select name="estado" required>
+      <option value="Pendiente" {% if solicitud.estado == "Pendiente" %}selected{% endif %}>Pendiente</option>
+      <option value="Aprobado" {% if solicitud.estado == "Aprobado" %}selected{% endif %}>Aprobado</option>
+      <option value="Rechazado" {% if solicitud.estado == "Rechazado" %}selected{% endif %}>Rechazado</option>
+    </select>
+
+    <!-- Tipo de trámite -->
+    <label for="tipo_tramite">Tipo de Trámite</label>
+    <input type="text" name="tipo_tramite" value="{{ solicitud.tipo_tramite }}" />
+
+    <!-- Formato de pago -->
+    <label for="formato_pago">Formato de Pago</label>
+    <input type="text" name="formato_pago" value="{{ solicitud.formato_pago }}" />
+
+    <button type="submit">Guardar Cambios</button>
+  </form>
+
+</body>
+</html>

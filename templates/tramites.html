@@ -26,7 +26,6 @@
       <ul class="menu" id="menu">
         <li><a href="#">Ver Tramite</a></li>
         <li><a href="{{ url_for('registroTramite') }}">Registrar Tramite </a></li>
-        <li><a href="{{ url_for('solicitudesTramite') }}">Solicitudes de Tramites</a></li>
       </ul>
 
       <nav class="menu-horizontal">
@@ -79,53 +78,55 @@
       </div>
     </div>
   </form>
-
- 
   <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto;">
-
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre del Trámite</th>
-        <th>Modalidad</th>
-        <th>Tipo de Trámite</th>
-        <th>Costo</th>
-        <th>Formato de pago</th>
-        <th>Estado</th>
-        <th>Documento que se expide</th>
-        <th>Vigencia</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for tramite in tramites %}
-      <tr>
-        <td>{{ tramite.id }}</td>
-        <td>{{ tramite.nombre }}</td>
-        <td>{{ tramite.modalidad }}</td>
-        <td>{{ tramite.tipo_tramite }}</td>
-        <td>{{ tramite.costo }}</td>
-        <td>{{ tramite.formato_pago }}</td>
-        <td>{{ tramite.estado }}</td>
-        <td>{{ tramite.documento_expide }}</td>
-        <td>{{ tramite.vigencia }}</td>
-        <td>
-          <a href="{{ url_for('editar_tramite', id=tramite.id) }}" title="Editar">👁️</a>
-        </td>
-        <td>
-          <form method="post" action="{{ url_for('eliminar_tramite', id=tramite.id) }}" style="display:inline;">
-            <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este trámite?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
-          </form>
-        </td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="12" style="text-align:center;">No se encontraron resultados.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre del Trámite</th>
+      <th>Modalidad</th>
+      <th>Tipo de Trámite</th>
+      <th>Costo</th>
+      <th>Formato de pago</th>
+      <th>Documento que se expide</th>
+      <th>Vigencia</th>
+      <th>Estado</th>
+      <th>Ver</th>
+      <th>Editar</th>
+      <th>Eliminar</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for tramite in tramites %}
+    <tr>
+      <td>{{ tramite.id }}</td>
+      <td>{{ tramite.nombre }}</td>
+      <td>{{ tramite.modalidad }}</td>
+      <td>{{ tramite.tipo_tramite }}</td>
+      <td>{{ tramite.costo }}</td>
+      <td>{{ tramite.formato_pago }}</td>
+      <td>{{ tramite.documento_expide }}</td>
+      <td>{{ tramite.vigencia }}</td>
+      <td class="state {{ tramite.estado|lower }}">{{ tramite.estado }}</td>
+      <td>
+        <a href="{{ url_for('ver_tramite', id=tramite.id) }}" title="Ver">👁️</a>
+      </td>
+      <td>
+        <a href="{{ url_for('editar_tramite', id=tramite.id) }}" title="Editar">✏️</a>
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('eliminar_tramite', id=tramite.id) }}" style="display:inline;">
+          <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este trámite?')" style="background:none; border:none; cursor:pointer;">🗑️</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="12" style="text-align:center;">No se encontraron resultados.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
   </table>
+
   
 
   <script src="{{ url_for('static', filename='apoyoburger.js') }}"></script>

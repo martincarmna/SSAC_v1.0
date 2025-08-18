@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Registrar Trámite</title>
+  <title>{{ 'Editar Trámite' if tramite else 'Registrar Trámite' }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='registrotramite.css') }}" />
 </head>
 <body>
@@ -15,29 +15,31 @@
     </div>
 
     <nav>
-    <a href="{{ url_for('ver') }}">CIUDADANOS</a>
-    <a href="{{ url_for('servicios') }}">SERVICIOS</a>
-    <a href="{{ url_for('apoyos') }}">APOYOS</a>
-    <a href="{{ url_for('tramites') }}" class = activate>TRÁMITES</a>
-  </nav>
+      <a href="{{ url_for('ver') }}">CIUDADANOS</a>
+      <a href="{{ url_for('servicios') }}">SERVICIOS</a>
+      <a href="{{ url_for('apoyos') }}">APOYOS</a>
+      <a href="{{ url_for('tramites') }}" class="activate">TRÁMITES</a>
+    </nav>
 
   <!-- Contenedor central del formulario -->
   <div class="form-container">
-    <h2>Registrar nuevo trámite</h2>
+    <h2>{{ 'Editar Trámite' if tramite else 'Registrar nuevo trámite' }}</h2>
 
-    <form class="tramite-form" method="POST" action="{{ url_for('guardar_tramite') }}">
+    <form class="tramite-form" method="POST" 
+          action="{{ url_for('editar_tramite', id=tramite.id) if tramite else url_for('guardar_tramite') }}">
 
       <div class="form-left">
         <div class="form-group">
           <label>Nombre del Trámite</label>
-          <input type="text" name="nombre" placeholder="Nombre del trámite" required />
+          <input type="text" name="nombre" placeholder="Nombre del trámite" 
+                 value="{{ tramite.nombre if tramite else '' }}" required />
         </div>
 
         <div class="form-group">
           <label>Modalidad</label>
           <select name="modalidad" required>
             <option value="">ej. Presencial.</option>
-            <option value="Presencial">Presencial</option>
+            <option value="Presencial" {% if tramite and tramite.modalidad == 'Presencial' %}selected{% endif %}>Presencial</option>
           </select>
         </div>
 
@@ -45,13 +47,14 @@
           <label>Documento que se expide</label>
           <select name="documento_expide" required>
             <option value="">-- Selecciona --</option>
-            <option value="Constancia">Constancia</option>
-            <option value="Certificado">Certificado</option>
+            <option value="Constancia" {% if tramite and tramite.documento_expide == 'Constancia' %}selected{% endif %}>Constancia</option>
+            <option value="Certificado" {% if tramite and tramite.documento_expide == 'Certificado' %}selected{% endif %}>Certificado</option>
           </select>
         </div>
 
         <label for="vigencia" class="required">Vigencia:</label>
-        <input type="date" id="vigencia" name="vigencia" required>
+        <input type="date" id="vigencia" name="vigencia" 
+               value="{{ tramite.vigencia if tramite else '' }}" required>
       
       </div>
 
@@ -60,22 +63,23 @@
           <label>Tipo de Trámite</label>
           <select name="tipo_tramite" required>
             <option value="">-- Selecciona --</option>
-            <option value="Licencia">Licencia</option>
-            <option value="Permiso">Permiso</option>
+            <option value="Licencia" {% if tramite and tramite.tipo_tramite == 'Licencia' %}selected{% endif %}>Licencia</option>
+            <option value="Permiso" {% if tramite and tramite.tipo_tramite == 'Permiso' %}selected{% endif %}>Permiso</option>
           </select>
         </div>
 
         <div class="form-group">
           <label>Costo</label>
-          <input type="number" step="0.01" name="costo" placeholder="Ej. 120.50" />
+          <input type="number" step="0.01" name="costo" placeholder="Ej. 120.50" 
+                 value="{{ tramite.costo if tramite else '' }}" />
         </div>
 
         <div class="form-group">
           <label>Formato de Pago</label>
           <select name="formato_pago" required>
             <option value="">-- Selecciona --</option>
-            <option value="Tarjeta">Tarjeta</option>
-            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta" {% if tramite and tramite.formato_pago == 'Tarjeta' %}selected{% endif %}>Tarjeta</option>
+            <option value="Efectivo" {% if tramite and tramite.formato_pago == 'Efectivo' %}selected{% endif %}>Efectivo</option>
           </select>
         </div>
 
@@ -83,14 +87,14 @@
           <label>Estado</label>
           <select name="estado" required>
             <option value="">-- Selecciona --</option>
-            <option value="Activo">Activo</option>
-            <option value="Inactivo">Inactivo</option>
+            <option value="Activo" {% if tramite and tramite.estado == 'Activo' %}selected{% endif %}>Activo</option>
+            <option value="Inactivo" {% if tramite and tramite.estado == 'Inactivo' %}selected{% endif %}>Inactivo</option>
           </select>
         </div>
       </div>
 
       <div class="form-actions">
-        <button type="submit" class="btn save">Guardar</button>
+        <button type="submit" class="btn save">{{ 'Actualizar' if tramite else 'Guardar' }}</button>
         <a href="{{ url_for('tramites') }}" class="btn cancel">Cancelar</a>
       </div>
     </form>

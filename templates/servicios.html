@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Ver Servicios</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='servicios.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='servicios.css') }}">
   <style>
     .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
     .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
@@ -11,45 +11,26 @@
       box-shadow:0 2px 5px rgba(0,0,0,0.1); position:relative; z-index:1000; }
     .filtro-checkboxes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:10px; }
   </style>
-  
 </head>
 <body>
   <div class="contenedor">
     <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
-    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
+    <a href="http://127.0.0.1:5000/">Cerrar sesión</a>
     <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
   </div>
 
   <header>
-  <div class="top-bar">
-    <div class="menu-hamburguesa" onclick="document.querySelector('.menu').classList.toggle('mostrar')">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
+    <div class="top-bar">
+      <div class="menu-hamburguesa" id="btn-menu" onclick="document.querySelector('.menu').classList.toggle('mostrar')">
+        <span></span><span></span><span></span>
+      </div>
 
       <ul class="menu" id="menu">
-  <li>
-    <a href="{{ url_for('servicios') }}" class="{% if request.path == url_for('servicios') %}activo{% endif %}">Ver Servicios</a>
-  </li>
-  <li>
-    <a href="{{ url_for('guardar_servicio') }}" class="{% if request.path == url_for('guardar_servicio') %}activo{% endif %}">Registrar Servicio</a>
-  </li>
-    
+        <li><a href="{{ url_for('servicios') }}" class="{% if request.path == url_for('servicios') %}activo{% endif %}">Ver Servicios</a></li>
+        <li><a href="{{ url_for('registro_servicio') }}" class="{% if request.path == url_for('registro_servicio') %}activo{% endif %}">Registrar Servicio</a></li>
+        <li><a href="{{ url_for('solicitudes_servicio') }}">Solicitudes de Servicio</a></li>
+      </ul>
 
-  <!--<li>
-    <a href="#" class="{% if request.path == '/agua-potable' %}activo{% endif %}">Agua Potable</a>
-  </li>
--->
-  <li>
-    <a href="#" class="{% if request.path == '/solicitudes-servicio' %}activo{% endif %}">Solicitudes de Servicio</a>
-  </li>
-</header>
-
-</ul>
-
-     
       <nav class="menu-horizontal">
         <a href="/ver" class="{% if request.path == '/ver' %}activo{% endif %}">Ciudadanos</a>
         <a href="/servicios" class="{% if request.path == '/servicios' %}activo{% endif %}">Servicios</a>
@@ -84,52 +65,53 @@
       </div>
 
       <div class="buscador" style="margin-left: 20px;">
-        <input type="text" name="busqueda" placeholder="Buscar servicio..."
-          value="{{ busqueda }}" autocomplete="off" />
+        <input type="text" name="busqueda" placeholder="Buscar servicio..." value="{{ busqueda }}" autocomplete="off" />
         <button type="submit">Buscar</button>
       </div>
     </div>
   </form>
 
-  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto;">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre del Servicio</th>
-        <th>Tipo de Servicio</th>
-        <th>Costo</th>
-        <th>Estado</th>
-        <th>Editar</th>
-        <th>Eliminar</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for serv in servicios %}
-      <tr>
-        <td>{{ serv.id }}</td>
-        <td>{{ serv.nombre }}</td>
-        <td>{{ serv.tipo_servicio }}</td>
-        <td>{{ serv.costo }}</td>
-        <td>{{ serv.estado }}</td>
-        <td>
-          <a href="{{ url_for('editar_servicio', id=serv.id) }}" title="Editar">👁️</a>
-        </td>
-        <td>
-          <form method="post" action="{{ url_for('eliminar_servicio', id=serv.id) }}"
-                style="display:inline;">
-            <button type="submit" title="Eliminar"
-              onclick="return confirm('¿Seguro que deseas eliminar este servicio?')"
-              style="background:none; border:none; cursor:pointer;">🗑️</button>
-          </form>
-        </td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="7" style="text-align:center;">No se encontraron resultados.</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <table border="1" cellspacing="0" cellpadding="5" style="margin-top: 20px; width: 80%; margin-left: auto; margin-right: auto; text-align: center;">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre del Servicio</th>
+      <th>Tipo de Servicio</th>
+      <th>Costo</th>
+      <th>Estado</th>
+      <th>Editar</th>
+      <th>Ver</th>
+      <th>Eliminar</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for serv in servicios %}
+    <tr>
+      <td>{{ serv.id }}</td>
+      <td>{{ serv.nombre }}</td>
+      <td>{{ serv.tipo_servicio }}</td>
+      <td>{{ serv.costo }}</td>
+      <td class="state {{ serv.estado|lower }}">{{ serv.estado }}</td>
+      <td>
+        <a href="{{ url_for('editar_servicio', id=serv.id) }}" title="Editar" style="font-size:18px;">✏️</a>
+      </td>
+      <td>
+        <a href="{{ url_for('ver_servicio', id=serv.id) }}" title="Ver" style="font-size:18px;">👁️</a>
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('eliminar_servicio', id=serv.id) }}" style="display:inline;">
+          <button type="submit" title="Eliminar" onclick="return confirm('¿Seguro que deseas eliminar este servicio?')" style="background:none; border:none; cursor:pointer; font-size:18px;">🗑️</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="8" style="text-align:center;">No se encontraron resultados.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 
   <script src="{{ url_for('static', filename='servicioburger.js') }}"></script>
 </body>
