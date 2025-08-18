@@ -63,20 +63,204 @@ CREATE TABLE apoyos (
 );
 
 
+
+use prueba_flask;
 CREATE TABLE solicitudes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ciudadano_id INT,
-    apoyo_id INT,
+    tipo_solicitud_id int,
     fecha_solicitud DATE,
+    estado_solicitud varchar(40),
     FOREIGN KEY (ciudadano_id) REFERENCES ciudadanos(id),
-    FOREIGN KEY (apoyo_id) REFERENCES apoyos(id)
+    FOREIGN KEY (tramites_id) REFERENCES tramites(id),
+	FOREIGN KEY (tipo_solicitud_id) REFERENCES tipo_solicitud(id)
 );
 
-CREATE TABLE solicitudes_tramite (
+insert into solicitudes
+(ciudadano_id, fecha_solicitud, estado_solicitud) values
+(4,4,'2025-08-14','Pendiente');
+
+select * from ciudadanos;
+select * from tramites;
+
+use prueba_flask;
+create table tipos_solicitud(
+id_tipo int,
+tipo_solicitud varchar(30)
+); 
+
+use prueba_flask;
+create table solicitud_Tram(
+id_sol_tram INT AUTO_INCREMENT PRIMARY KEY,
+tramites_id int,
+ciudadanos_id int,
+modalidad varchar(40),
+costo float,
+estado varchar(20),
+tipo_tramite varchar(100),
+dependencia varchar(100),
+vigencia int,
+documenti_expide varchar(100),
+formato_pago varchar(100),
+FOREIGN KEY (tramites_id) REFERENCES tramites(id),
+FOREIGN KEY (ciudadanos_id) REFERENCES ciudadanos(id)
+);
+
+use prueba_flask;
+insert into solicitud_tram values (1,5,4,'Presencial',200,'En proceso','Tramite',
+'',5,'Credencial','Efectivo');
+
+select * from tramites;
+
+use prueba_flask;
+create table solicitud_Serv(
+id_sol_Ser INT AUTO_INCREMENT PRIMARY KEY,
+servicios_id int,
+ciudadanos_id int,
+nombre varchar (100),
+costo float,
+estado varchar(20),
+tipo_tramite varchar(100),
+formato_pago varchar(100),
+FOREIGN KEY (servicios_id) REFERENCES servicios(id),
+FOREIGN KEY (ciudadanos_id) REFERENCES ciudadanos(id)
+);
+
+
+use prueba_flask;
+insert into solicitud_Serv values (1,8,4,'Toma de agua',50,'Activo','Servicio','Efectivo');
+
+insert into solicitudes_tramite  
+(id_tipo,tipo_solicitud) values
+(1,'Tramite');
+
+
+use prueba_flask;
+create table solicitud_apoyo(
+id_sol_apoyo INT AUTO_INCREMENT PRIMARY KEY,
+apoyos_id int,
+ciudadanos_id int,
+nombre varchar (100),
+descripcion varchar(100),
+fecha_solicitud date,
+costo float,
+estado varchar(20),
+tipo_tramite varchar(100),
+formato_pago varchar(100),
+FOREIGN KEY (apoyos_id) REFERENCES apoyos(id),
+FOREIGN KEY (ciudadanos_id) REFERENCES ciudadanos(id)
+);
+
+create table tipo_tramite(
+id_tipo_tramite INT AUTO_INCREMENT PRIMARY KEY,
+tipo_tramite varchar(100)
+);
+
+insert into tipo_tramite values (3,'Apoyo');
+
+
+
+use prueba_flask;
+insert into solicitud_apoyo values (1,3,4,'gas','hwvdhgwcvdwdhgwv',NOW(),66,'Activo','Apoyo','Efectivo');
+
+select * from tipo_tramite;
+use prueba_flask;
+CREATE TABLE solicitudes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ciudadano_id INT,
-    apoyo_id INT,
+    tipo_solicitud_id int,
     fecha_solicitud DATE,
+    estado_solicitud varchar(40),
     FOREIGN KEY (ciudadano_id) REFERENCES ciudadanos(id),
-    FOREIGN KEY (apoyo_id) REFERENCES apoyos(id)
+    FOREIGN KEY (tramites_id) REFERENCES tramites(id),
+	FOREIGN KEY (tipo_solicitud_id) REFERENCES tipo_solicitud(id)
 );
+
+insert into solicitudes
+(ciudadano_id, fecha_solicitud, estado_solicitud) values
+(4,4,'2025-08-14','Pendiente');
+
+select * from ciudadanos;
+select * from tramites;
+
+use prueba_flask;
+create table tipos_solicitud(
+id_tipo int,
+tipo_solicitud varchar(30)
+); 
+
+use prueba_flask;
+create table solicitud_Tram(
+id_sol_tram INT AUTO_INCREMENT PRIMARY KEY,
+tramites_id int,
+ciudadanos_id int,
+modalidad varchar(40),
+costo float,
+estado varchar(20),
+tipo_tramite varchar(100),
+dependencia varchar(100),
+vigencia int,
+documenti_expide varchar(100),
+formato_pago varchar(100),
+FOREIGN KEY (tramites_id) REFERENCES tramites(id),
+FOREIGN KEY (ciudadanos_id) REFERENCES ciudadanos(id)
+);
+
+use prueba_flask;
+insert into solicitud_tram values (1,5,4,'Presencial',200,'En proceso','Tramite',
+'',5,'Credencial','Efectivo');
+
+select * from tramites;
+
+use prueba_flask;
+create table solicitud_Serv(
+id_sol_Ser INT AUTO_INCREMENT PRIMARY KEY,
+servicios_id int,
+ciudadanos_id int,
+nombre varchar (100),
+costo float,
+estado varchar(20),
+tipo_tramite varchar(100),
+formato_pago varchar(100),
+FOREIGN KEY (servicios_id) REFERENCES servicios(id),
+FOREIGN KEY (ciudadanos_id) REFERENCES ciudadanos(id)
+);
+
+
+use prueba_flask;
+insert into solicitud_Serv values (1,8,4,'Toma de agua',50,'Activo','Servicio','Efectivo');
+
+insert into solicitudes_tramite  
+(id_tipo,tipo_solicitud) values
+(1,'Tramite');
+
+
+use prueba_flask;
+create table solicitud_apoyo(
+id_sol_apoyo INT AUTO_INCREMENT PRIMARY KEY,
+apoyos_id int,
+ciudadanos_id int,
+nombre varchar (100),
+descripcion varchar(100),
+fecha_solicitud date,
+costo float,
+estado varchar(20),
+tipo_tramite varchar(100),
+formato_pago varchar(100),
+FOREIGN KEY (apoyos_id) REFERENCES apoyos(id),
+FOREIGN KEY (ciudadanos_id) REFERENCES ciudadanos(id)
+);
+
+create table tipo_tramite(
+id_tipo_tramite INT AUTO_INCREMENT PRIMARY KEY,
+tipo_tramite varchar(100)
+);
+
+insert into tipo_tramite values (3,'Apoyo');
+
+
+
+use prueba_flask;
+insert into solicitud_apoyo values (1,3,4,'gas','hwvdhgwcvdwdhgwv',NOW(),66,'Activo','Apoyo','Efectivo');
+
+select * from tipo_tramite;
