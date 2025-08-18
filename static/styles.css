@@ -4,7 +4,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     background-color: #ddd;
     font-family: Arial, sans-serif;
@@ -12,20 +11,10 @@ body {
     padding: 0;
 }
 
-.caja {
-    position: relative;
+.header {
     width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    height: auto;
-}
-
-.contenedor {
-    height: 100px;
-    padding-left: 40px;
-    padding-right: 120px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 15% 60% 15%;
     align-items: center;
 }
 
@@ -37,126 +26,84 @@ body {
     left: 50px;
     margin-right: 50px;
 }
-
-/* Título principal */
-h1 {
-    font-family: 'DM Serif Text', serif;
-    margin: 50px auto 0 auto;
-    text-align: center;
-    color: #333;
-    order: 1;
-    flex-grow: 1;
-    padding-bottom: 60px;
+.top-bar {
+  display: flex;
+  align-items: center;
+  background-color: #ddd;
+  position: relative;
+  z-index: 10;
+  padding: 10px 20px; /* Añade padding para mejor espaciado */
 }
 
-a {
-    font-family: 'DM Serif Text', serif;
-    font-size: 14px;
-    text-decoration: underline;
-    color: #690202;
-    order: 2;
-    margin-left: 50px;
+.menu-hamburguesa {
+  margin-right: 20px; /* Espacio entre hamburguesa y menú horizontal */
+  cursor: pointer;
 }
 
-a:hover {
-    color: #eb0c0c;
+.menu-hamburguesa span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 5px 0;
+  transition: all 0.3s ease;
 }
 
-h2 {
-    font-family: 'DM Serif Text', serif;
-    font-size: 20px;
-    margin: 10px auto 0 auto;
-    text-align: center;
-    color: #333;
-    padding-bottom: 30px;
+.menu {
+  display: none; /* Oculto por defecto (se mostrará con JS) */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ddd;
+  width: 100%;
+  padding: 10px 0;
+  list-style: none;
+  margin: 0;
 }
 
-.formulario {
-    width: 91%;
-    height: 91%;
-    transform: translateX(5%);
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+.menu li {
+  padding: 10px 20px;
 }
 
-.columna {
-    width: 24%;
-    margin: 10px;
+.menu li a {
+  text-decoration: none;
+  color: #333;
 }
 
-/* Etiquetas personalizadas */
-p4, p5, p6, p7, p8, p9, p10, p12, p13, p14, p15 {
-    font-family: 'DM Serif Text', serif;
-    padding-left: 40px;
-    display: block;
-    margin-top: 30px;
-    font-size: 14px;
-    color: #020000;
+.menu-horizontal {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1; /* Ocupa todo el espacio disponible */
+  margin-left: auto; /* Empuja el menú horizontal a la derecha */
 }
 
-/* Campos de entrada */
-input[type="text"], select {
-    background-color: #ccd7fc;
-    margin-left: 40px;
-    display: block;
-    width: 200px;
-    height: 30px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #aabdf3;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.menu-horizontal a {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 15px;
+  flex-grow: 1;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
-#campo11 {
-    height: 40px;
+.menu-horizontal a.activo,
+.menu-horizontal a:hover {
+  background-color: #bbb;
 }
 
-select {
-    height: 40px;
+/* Estilos para el menú hamburguesa cuando está activo */
+.menu-hamburguesa.activo span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
-/* Botones */
-.btn-primaryG, .btn-primaryC {
-    font-family: 'DM Serif Text', serif;
-    transform: translateX(40px);
-    text-align: center;
-    margin: 20px auto 0 auto;
-    padding: 10px 10px;
-    width: 100px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.menu-hamburguesa.activo span:nth-child(2) {
+  opacity: 0;
 }
 
-.btn-primaryG {
-    background-color: #09365a;
-    color: white;
+.menu-hamburguesa.activo span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
 }
 
-.btn-primaryG:hover {
-    background-color: #0056b3;
-}
-
-.btn-primaryC {
-    background-color: #5a0936;
-    color: white;
-}
-
-.btn-primaryC:hover {
-    background-color: #df066e;
-}
-
-/* Estilo para enlaces tipo botón (como Cancelar en editar) */
-.btn-primaryC[href] {
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    line-height: 30px;
+.menu.mostrar {
+  display: block;
 }

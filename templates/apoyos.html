@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Apoyos</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='apoyos.css') }}">
+  <link rel="stylesheet" href="/static/apoyos.css">
   <style>
     .menu-horizontal a { padding:8px 12px; text-decoration:none; color:#333; }
     .menu-horizontal a.activo { background:#09365a; color:#fff; border-radius:4px; }
@@ -13,11 +13,18 @@
   </style>
 </head>
 <body>
-  <div class="contenedor">
-    <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
-    <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
-    <img src="{{ url_for('static', filename='logo1.png') }}" alt="logo del Sistema" class="logo" />
-  </div>
+  <div class="container">
+    <div class="cabecera">
+      <div>
+        <img src="/static/logo1.png" alt="logo del Sistema" class="logo" />
+      </div>
+      <div>
+        <h1 class="titulo">Sistema de Solicitud y Atención Ciudadana</h1>
+      </div>
+      <div>
+        <a href="http://127.0.0.1:5000/">Cerrar sesion</a>
+      </div>
+    </div>
 
   <header>
     <div class="top-bar">
@@ -132,5 +139,10 @@
 
 
   <script src="{{ url_for('static', filename='apoyoburger.js') }}"></script>
+  </div>
+  
+  <footer>
+
+  </footer>
 </body>
 </html>

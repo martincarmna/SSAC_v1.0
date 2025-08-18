@@ -1,30 +1,59 @@
 /* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+html,
 body {
-    background-color: #ddd;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  height: 100%;
+  /* Ocupa toda la altura de la ventana */
+  margin: 0;
+  /* Elimina márgenes por defecto */
+  padding: 0;
+  /* Elimina padding por defecto */
+  box-sizing: border-box;
 }
+
+body {
+  display: flex;
+  /* Permite centrar contenido fácilmente */
+  justify-content: center;
+  /* Centra horizontal */
+  align-items: center;
+  /* Centra vertical */
+  /*background-color: #f8f9fa;*/
+  /* Color de fondo claro opcional */
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  max-width: 1500px;
+  /* Máximo ancho estándar */
+  margin: 0 auto;
+  /* Centra horizontalmente si hay espacio */
+  padding: 20px;
+  /* Margen interno estándar */
+  background: #fff;
+  /* Fondo blanco */
+  border-radius: 8px;
+  /* Bordes redondeados opcionales */
+}
+
 .cabecera {
-    font-family: dm serif-text;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 15% 1fr 15%;
+  align-items: center;  
 }
-.contenedor {
-  border-color: #09365a;
-height: 100px;
-padding-left: 40px;
-padding-right: 120px;
-display: flex;
-justify-content: space-between;
-align-items: center;
+
+.cabecera h1{
+    font-family: 'DM Serif Text', serif;
+  background-size: cover;
+  font-size: 32px;
+  margin-top: 50px;
+  text-align: center;
+  color: #333;
+  order: 1;
+  flex-grow: 1;
+  padding-bottom: 60px;
 }
 
 .logo {
@@ -36,23 +65,6 @@ align-items: center;
   margin-right: 50px;
 }
 
-h1 {
-  font-family: 'DM Serif Text' ,serif;
-  background-size: cover;
-  font-size: 32px;
-  margin-top: 50px;
-  text-align: center;
-  color: #333;
-  order: 1;
-  flex-grow: 1;
-  padding-bottom: 60px;
-}
-h2 {
-     transform: translateX(140px);
-    font-family: 'DM Serif Text' ,serif;
-  margin-top: 20px;
-  margin-top: 20px;
-}
 .filters {
   display: flex;
   justify-content: left;
@@ -68,6 +80,7 @@ h2 {
   border-radius: 10px;
   border: 1px solid #ccc;
 }
+
 .contenedor-filtros-busqueda {
   transform: translateX(-150px);
   display: flex;
@@ -119,9 +132,11 @@ h2 {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
+
 .filtro-dropdown {
   display: none;
-  position: relative; /* o absolute si quieres que flote */
+  position: relative;
+  /* o absolute si quieres que flote */
   z-index: 1000;
   margin-bottom: 20px;
 }
@@ -133,7 +148,7 @@ h2 {
   background-color: #fff;
   padding: 10px;
   border: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -211,12 +226,13 @@ td:nth-child(5) {
 .proceso {
   color: orange;
 }
+
 .vencido {
-    color: #eb0c0c;
+  color: #eb0c0c;
 }
 
 .ver {
-    font-family: 'DM Serif Text' ,serif;
+  font-family: 'DM Serif Text', serif;
   text-align: center;
   font-size: 18px;
 }
@@ -234,16 +250,19 @@ td:nth-child(5) {
   cursor: pointer;
   border-radius: 4px;
 }
+
 .pagination .active {
   background-color: #09365a;
   color: white;
 }
+
 .active:hover {
   color: white;
-   background-color: #5a0936;
+  background-color: #5a0936;
 }
+
 a {
-  font-family: 'DM Serif Text' ,serif;
+  font-family: 'DM Serif Text', serif;
   background-size: cover;
   font-size: 14px;
   text-decoration: underline;
@@ -255,9 +274,10 @@ a {
 a:hover {
   color: #eb0c0c;
 }
+
 /* ======= Estilo general ======= */
 body {
-  font-family: 'DM Serif Text', serif; 
+  font-family: 'DM Serif Text', serif;
   margin: 0;
   padding: 0;
 }
@@ -272,8 +292,8 @@ header {
 
 /* ======= Barra superior ======= */
 .top-bar {
-  display:flex;
-   margin: -10px auto 0 auto;
+  display: flex;
+  margin: -10px auto 0 auto;
   align-items: center;
   justify-content: space-between;
   background-color: #ddd;
@@ -293,7 +313,7 @@ header {
 }
 
 .menu-hamburguesa span {
-  
+
   display: flex;
   height: 4px;
   background-color: black;
@@ -321,7 +341,8 @@ header {
 }
 
 .menu.mostrar {
-  display: block; /* se muestra cuando tiene la clase .mostrar */
+  display: block;
+  /* se muestra cuando tiene la clase .mostrar */
 }
 
 .menu li {
@@ -354,34 +375,3 @@ header {
   display: block;
   text-align: left;
 }
-
-/* ======= Menú horizontal ======= */
-.menu-horizontal {
-   display: flex; /* necesario para que flexbox funcione */
-  width: 100%;
-  height: 50%;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.menu-horizontal a {
-  display: flex;
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: background-color 0.3s;
-}
-
-.menu-horizontal a:hover {
-  background-color: #09365a;
-  color: white;
-}
-
-.menu-horizontal {
-  transform: translateX(-49px); /* mueve el nav bar completo 49px a la izquierda */
-}
-
-

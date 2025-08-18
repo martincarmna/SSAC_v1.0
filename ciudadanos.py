@@ -6,7 +6,7 @@ app.secret_key = "1234"
 
 db_config = {
     'user': 'root',
-    'password': 'root',
+    'password': '',
     'host': 'localhost',
     'database': 'prueba_flask'
 }
